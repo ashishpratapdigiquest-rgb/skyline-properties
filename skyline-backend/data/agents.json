@@ -1,0 +1,10 @@
+[
+  {"id": 1, "name": "James Anderson", "role": "Luxury Property Specialist", "phone": "+1 (555) 123 4567", "rating": 5, "photo": "https://randomuser.me/api/portraits/men/32.jpg"},
+  {"id": 2, "name": "Sophia Martinez", "role": "Residential Expert", "phone": "+1 (555) 234 5678", "rating": 5, "photo": "https://randomuser.me/api/portraits/women/44.jpg"},
+  {"id": 3, "name": "Michael Roberts", "role": "Investment Consultant", "phone": "+1 (555) 345 6789", "rating": 4, "photo": "https://randomuser.me/api/portraits/men/54.jpg"},
+  {"id": 4, "name": "Olivia Bennett", "role": "Relocation Specialist", "phone": "+1 (555) 456 7890", "rating": 5, "photo": "https://randomuser.me/api/portraits/women/68.jpg"},
+  {"id": 5, "name": "Daniel Kim", "role": "Commercial & High-Rise", "phone": "+1 (555) 567 8901", "rating": 5, "photo": "https://randomuser.me/api/portraits/men/22.jpg"},
+  {"id": 6, "name": "Isabella Cruz", "role": "Waterfront Specialist", "phone": "+1 (555) 678 9012", "rating": 4, "photo": "https://randomuser.me/api/portraits/women/12.jpg"},
+  {"id": 7, "name": "Ethan Brooks", "role": "New Development Advisor", "phone": "+1 (555) 789 0123", "rating": 5, "photo": "https://randomuser.me/api/portraits/men/41.jpg"},
+  {"id": 8, "name": "Grace Lin", "role": "International Buyers", "phone": "+1 (555) 890 1234", "rating": 5, "photo": "https://randomuser.me/api/portraits/women/56.jpg"}
+]

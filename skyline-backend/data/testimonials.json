@@ -1,0 +1,5 @@
+[
+  {"id": 1, "name": "David Thompson", "rating": 5, "quote": "The best real estate experience I've ever had. Professional, transparent, and truly caring.", "photo": "https://randomuser.me/api/portraits/women/21.jpg"},
+  {"id": 2, "name": "Emily Carter", "rating": 5, "quote": "They helped us find our dream home with the perfect view. Highly recommended!", "photo": "https://randomuser.me/api/portraits/women/29.jpg"},
+  {"id": 3, "name": "Robert Williams", "rating": 5, "quote": "Exceptional service and incredible attention to detail. Highly satisfied.", "photo": "https://randomuser.me/api/portraits/men/76.jpg"}
+]

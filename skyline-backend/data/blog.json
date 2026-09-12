@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "slug": "luxury-market-trends-2026",
+    "date": "Jan 12, 2026",
+    "title": "5 Trends Shaping the Luxury Market in 2026",
+    "excerpt": "From smart-home integration to wellness amenities, here's what buyers are prioritizing this year.",
+    "image": "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=700&q=80"
+  },
+  {
+    "id": 2,
+    "slug": "penthouse-value-upgrades",
+    "date": "Dec 28, 2025",
+    "title": "What Actually Adds Value to a Penthouse",
+    "excerpt": "Not every upgrade pays off. Here's where high-rise buyers should focus their renovation budget.",
+    "image": "https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?auto=format&fit=crop&w=700&q=80"
+  },
+  {
+    "id": 3,
+    "slug": "first-time-buyer-financing-guide",
+    "date": "Dec 10, 2025",
+    "title": "A First-Time Buyer's Guide to Financing a High-Rise Home",
+    "excerpt": "Jumbo loans, co-op boards, and everything else first-timers get wrong about buying up high.",
+    "image": "https://images.unsplash.com/photo-1554469384-e58fac16e23a?auto=format&fit=crop&w=700&q=80"
+  },
+  {
+    "id": 4,
+    "slug": "waterfront-vs-downtown",
+    "date": "Nov 22, 2025",
+    "title": "Waterfront vs. Downtown: Which Fits Your Lifestyle?",
+    "excerpt": "We break down the trade-offs between two of our most popular neighborhoods.",
+    "image": "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=700&q=80"
+  },
+  {
+    "id": 5,
+    "slug": "choosing-the-right-agent",
+    "date": "Nov 5, 2025",
+    "title": "How to Choose the Right Agent for a Luxury Sale",
+    "excerpt": "Questions to ask before you list — and the red flags that should make you walk away.",
+    "image": "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=700&q=80"
+  },
+  {
+    "id": 6,
+    "slug": "investing-in-sky-gardens",
+    "date": "Oct 18, 2025",
+    "title": "Investing in Sky Gardens: Is It Worth the Premium?",
+    "excerpt": "A look at rental yields and resale value for properties with dedicated green space.",
+    "image": "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=700&q=80"
+  }
+]

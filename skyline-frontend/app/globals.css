@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: #33415a;
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center gap-2 px-6 py-3.5 rounded-lg font-semibold text-[15px] transition-transform duration-150 hover:-translate-y-0.5;
+  }
+  .btn-primary {
+    @apply bg-brand text-white shadow-[0_8px_20px_rgba(26,86,219,0.28)] hover:bg-brand-dark;
+  }
+  .btn-outline {
+    @apply bg-white text-brand border border-brand-tint2 hover:bg-brand-tint;
+  }
+  .section-eyebrow {
+    @apply flex items-center justify-center gap-3.5 mb-3.5;
+  }
+  .section-eyebrow::before,
+  .section-eyebrow::after {
+    content: "";
+    @apply w-9 h-0.5 bg-brand/40;
+  }
+  .icon-badge {
+    @apply w-10 h-10 rounded-lg bg-brand-tint flex items-center justify-center flex-shrink-0 text-lg;
+  }
+  .nav-link {
+    @apply text-[15px] font-medium text-slate-600 border-b-2 border-transparent hover:text-brand hover:border-brand py-1.5 transition-colors;
+  }
+  .nav-link-active {
+    @apply text-brand border-b-2 border-brand py-1.5;
+  }
+}
