@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export const metadata = { title: "About Us | Skyline Properties" };
+export const metadata = { title: "About Us | Unique Property" };
 
 const values = [
   { icon: "🤝", title: "Transparency", desc: "Every price, fee, and detail laid out clearly, from first viewing to closing day." },
@@ -23,20 +23,20 @@ export default function AboutPage() {
         <div className="max-w-[1180px] mx-auto px-6">
           <p className="text-brand font-bold text-[13px] tracking-[.08em]">WHO WE ARE</p>
           <h1 className="font-display text-[38px] font-bold text-navy mt-1.5">Built on Trust, Elevated by Design</h1>
-          <p className="text-slate-500 max-w-lg mx-auto mt-3.5">For over 15 years, Skyline Properties has connected discerning homeowners with the world's most exceptional addresses.</p>
+          <p className="text-slate-500 max-w-lg mx-auto mt-3.5">For over 15 years, Unique Property has connected discerning homeowners with the world's most exceptional addresses.</p>
         </div>
       </section>
 
       <section className="py-16">
         <div className="max-w-[1180px] mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
           <div className="relative h-[360px] rounded-2xl overflow-hidden shadow-elevated">
-            <Image src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=900&q=80" alt="Skyline office team" fill className="object-cover" />
+            <Image src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=900&q=80" alt="Unique Property office team" fill className="object-cover" />
           </div>
           <div>
             <span className="inline-flex items-center gap-1.5 bg-brand-tint text-brand font-semibold text-[12.5px] px-3.5 py-1.5 rounded-full">Our Story</span>
-            <h2 className="font-display text-[28px] font-semibold text-navy mt-3.5">From One Listing to a Global Skyline</h2>
+            <h2 className="font-display text-[28px] font-semibold text-navy mt-3.5">From One Listing to a Global Portfolio</h2>
             <p className="text-slate-500 mt-3.5 leading-relaxed text-[15px]">
-              Skyline Properties started in 2010 with a single downtown listing and a simple belief: buying a home should feel as exciting as the view from the 40th floor. Today we represent over 500 luxury properties across 12 cities, guided by the same principle — transparent advice, meticulous service, and homes worth waking up to.
+              Unique Property started in 2010 with a single downtown listing and a simple belief: buying a home should feel as exciting as the view from the 40th floor. Today we represent over 500 luxury properties across 12 cities, guided by the same principle — transparent advice, meticulous service, and homes worth waking up to.
             </p>
             <ul className="mt-5 space-y-3.5">
               {[

@@ -2,7 +2,7 @@ import Link from "next/link";
 import AgentCard from "@/components/AgentCard";
 import { getAgents } from "@/lib/api";
 
-export const metadata = { title: "Our Agents | Skyline Properties" };
+export const metadata = { title: "Our Agents | Unique Property" };
 
 export default async function AgentsPage() {
   const agents = await getAgents();

@@ -2,7 +2,7 @@ import Image from "next/image";
 import { getBlogPosts } from "@/lib/api";
 import NewsletterForm from "@/components/NewsletterForm";
 
-export const metadata = { title: "Blog | Skyline Properties" };
+export const metadata = { title: "Blog | Unique Property" };
 
 export default async function BlogPage() {
   const posts = await getBlogPosts();

@@ -38,7 +38,7 @@ export default async function HomePage() {
           <div>
             <p className="text-brand font-bold text-[13px] tracking-[.08em] mb-3.5">PREMIUM LIVING. PRIME LOCATIONS.</p>
             <h1 className="font-display text-[46px] font-bold leading-[1.1] text-navy -tracking-[.01em]">
-              Live Above <br />the <span className="text-brand">Skyline.</span>
+              Find Your <br />Unique <span className="text-brand">Property.</span>
             </h1>
             <p className="mt-4 text-slate-500 text-base max-w-[420px]">
               Luxury residences in prime locations. Elevated living, unmatched views.

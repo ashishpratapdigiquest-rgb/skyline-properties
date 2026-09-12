@@ -2,7 +2,7 @@ import Link from "next/link";
 import PropertyCard from "@/components/PropertyCard";
 import { getProperties } from "@/lib/api";
 
-export const metadata = { title: "Properties | Skyline Properties" };
+export const metadata = { title: "Properties | Unique Property" };
 
 export default async function PropertiesPage() {
   const properties = await getProperties();
