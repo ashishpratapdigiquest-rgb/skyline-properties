@@ -12,10 +12,6 @@ async function safeFetch(path, fallback) {
   }
 }
 
-export async function getProperties() {
-  return safeFetch("/api/properties", FALLBACK_PROPERTIES);
-}
-
 export async function getAgents() {
   return safeFetch("/api/agents", FALLBACK_AGENTS);
 }
@@ -55,15 +51,6 @@ export async function subscribeNewsletter(email) {
 }
 
 // ---- Fallback seed data (mirrors backend/data/*.json) ----
-export const FALLBACK_PROPERTIES = [
-  { id: 1, title: "Unique Penthouse", location: "Downtown, New York", price: 2800000, priceDisplay: "$2.8M", beds: 4, baths: 4, sqft: 3200, floor: "28th Floor", tag: "FEATURED", image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80" },
-  { id: 2, title: "Rooftop Haven", location: "Waterfront, Miami", price: 3600000, priceDisplay: "$3.6M", beds: 4, baths: 5, sqft: 4100, floor: "Penthouse", tag: "NEW", image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80" },
-  { id: 3, title: "Executive Residence", location: "Business District, Chicago", price: 4500000, priceDisplay: "$4.5M", beds: 5, baths: 6, sqft: 5500, floor: "45th Floor", tag: "LUXURY", image: "https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=800&q=80" },
-  { id: 4, title: "Sky Garden Suite", location: "Sky Gardens, Singapore", price: 1900000, priceDisplay: "$1.9M", beds: 3, baths: 3, sqft: 2400, floor: "18th Floor", tag: null, image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" },
-  { id: 5, title: "Harbor Vista Loft", location: "Harbor View, Boston", price: 2100000, priceDisplay: "$2.1M", beds: 2, baths: 2, sqft: 1850, floor: "12th Floor", tag: "NEW", image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80" },
-  { id: 6, title: "Azure Tower Residence", location: "Waterfront, Dubai", price: 5200000, priceDisplay: "$5.2M", beds: 6, baths: 7, sqft: 6800, floor: "60th Floor", tag: "LUXURY", image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80" },
-];
-
 export const FALLBACK_AGENTS = [
   { id: 1, name: "James Anderson", role: "Luxury Property Specialist", phone: "+1 (555) 123 4567", rating: 5, photo: "https://randomuser.me/api/portraits/men/32.jpg" },
   { id: 2, name: "Sophia Martinez", role: "Residential Expert", phone: "+1 (555) 234 5678", rating: 5, photo: "https://randomuser.me/api/portraits/women/44.jpg" },

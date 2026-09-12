@@ -1,18 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
-import PropertyCard from "@/components/PropertyCard";
+import PropertyCard from "@/components/Property/PropertyCard";
 import AgentCard from "@/components/AgentCard";
-import { getProperties, getAgents, getTestimonials } from "@/lib/api";
+import { getAgents, getTestimonials } from "@/lib/api";
+import { getFeaturedProperties } from "@/lib/propertyApi";
 import NewsletterForm from "@/components/NewsletterForm";
 
 export default async function HomePage() {
-  const [properties, agents, testimonials] = await Promise.all([
-    getProperties(),
+  const [featured, agents, testimonials] = await Promise.all([
+    getFeaturedProperties(3),
     getAgents(),
     getTestimonials(),
   ]);
 
-  const featured = properties.slice(0, 3);
   const topAgents = agents.slice(0, 4);
 
   const locations = [
