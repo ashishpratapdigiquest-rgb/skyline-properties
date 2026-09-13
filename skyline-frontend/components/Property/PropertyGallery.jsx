@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useCallback, useState } from "react";
-import Image from "next/image";
+import SmartImage from "@/components/Common/SmartImage";
 
 export default function PropertyGallery({ images = [], title = "Property" }) {
   const [active, setActive] = useState(0);
@@ -33,7 +33,7 @@ export default function PropertyGallery({ images = [], title = "Property" }) {
           className="absolute inset-0 w-full h-full focus:outline-none focus:ring-2 focus:ring-brand"
           aria-label={`Open fullscreen gallery, image ${active + 1} of ${count}`}
         >
-          <Image src={images[active]} alt={`${title} — photo ${active + 1}`} fill className="object-cover" priority sizes="(max-width: 1024px) 100vw, 900px" />
+          <SmartImage src={images[active]} alt={`${title} — photo ${active + 1}`} fill className="object-cover" priority sizes="(max-width: 1024px) 100vw, 900px" />
         </button>
 
         {count > 1 && (
@@ -73,7 +73,7 @@ export default function PropertyGallery({ images = [], title = "Property" }) {
               aria-current={i === active}
               className={`relative w-20 h-16 rounded-lg overflow-hidden flex-shrink-0 border-2 ${i === active ? "border-brand" : "border-transparent"}`}
             >
-              <Image src={img} alt="" fill className="object-cover" sizes="80px" />
+              <SmartImage src={img} alt="" fill className="object-cover" sizes="80px" />
             </button>
           ))}
         </div>
@@ -104,7 +104,7 @@ export default function PropertyGallery({ images = [], title = "Property" }) {
             ‹
           </button>
           <div className="relative w-[90vw] h-[80vh] max-w-5xl">
-            <Image src={images[active]} alt={`${title} — photo ${active + 1}`} fill className="object-contain" sizes="90vw" />
+            <SmartImage src={images[active]} alt={`${title} — photo ${active + 1}`} fill className="object-contain" sizes="90vw" />
           </div>
           <button
             type="button"

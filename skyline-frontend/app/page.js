@@ -16,11 +16,11 @@ export default async function HomePage() {
   const topAgents = agents.slice(0, 4);
 
   const locations = [
-    { name: "Downtown", image: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=400&q=80" },
-    { name: "Waterfront", image: "https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?auto=format&fit=crop&w=400&q=80" },
-    { name: "Business District", image: "https://images.unsplash.com/photo-1444723121867-7a241cacace9?auto=format&fit=crop&w=400&q=80" },
-    { name: "Sky Gardens", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=400&q=80" },
-    { name: "Harbor View", image: "https://images.unsplash.com/photo-1519452575417-564c1401ecc0?auto=format&fit=crop&w=400&q=80" },
+    { name: "Taramandal", image: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=400&q=80" },
+    { name: "Golghar", image: "https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?auto=format&fit=crop&w=400&q=80" },
+    { name: "Civil Lines", image: "https://images.unsplash.com/photo-1444723121867-7a241cacace9?auto=format&fit=crop&w=400&q=80" },
+    { name: "Rapti Nagar", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=400&q=80" },
+    { name: "Betiahata", image: "https://images.unsplash.com/photo-1519452575417-564c1401ecc0?auto=format&fit=crop&w=400&q=80" },
   ];
 
   const steps = [
@@ -36,24 +36,24 @@ export default async function HomePage() {
       <section className="bg-gradient-to-b from-white to-brand-tint pt-14">
         <div className="max-w-[1180px] mx-auto px-6 grid lg:grid-cols-[1fr_1.15fr] gap-10 items-center">
           <div>
-            <p className="text-brand font-bold text-[13px] tracking-[.08em] mb-3.5">PREMIUM LIVING. PRIME LOCATIONS.</p>
+            <p className="text-brand font-bold text-[13px] tracking-[.08em] mb-3.5">TRUSTED PROPERTY DEALER IN GORAKHPUR</p>
             <h1 className="font-display text-[46px] font-bold leading-[1.1] text-navy -tracking-[.01em]">
               Live Above <br />the <span className="text-brand">Skyline.</span>
             </h1>
             <p className="mt-4 text-slate-500 text-base max-w-[420px]">
-              Luxury residences in prime locations. Elevated living, unmatched views.
+              Gorakhpur, Uttar Pradesh mein aapke sapno ka ghar, plot ya office — Taramandal se Golghar tak, sab jagah hum hain.
             </p>
             <div className="flex gap-3.5 mt-7 flex-wrap">
-              <Link href="/properties" className="btn btn-primary">Explore Properties →</Link>
-              <Link href="/contact" className="btn btn-outline">Book a Consultation</Link>
+              <Link href="/properties" className="btn btn-primary">Properties Dekho →</Link>
+              <Link href="/contact" className="btn btn-outline">Free Consultation</Link>
             </div>
             <div className="flex items-center gap-3.5 mt-6">
               <div className="icon-badge w-11 h-11">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M17 20v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" stroke="#1a56db" strokeWidth="1.8" /><circle cx="10" cy="8" r="3.5" stroke="#1a56db" strokeWidth="1.8" /><path d="M21 20v-2a4 4 0 0 0-3-3.87" stroke="#1a56db" strokeWidth="1.8" /><path d="M15.5 4.13a4 4 0 0 1 0 7.75" stroke="#1a56db" strokeWidth="1.8" /></svg>
               </div>
               <div>
-                <b className="block text-xl text-navy">8,000+</b>
-                <span className="text-[13px] text-slate-500">Premium Properties Listed</span>
+                <b className="block text-xl text-navy">500+</b>
+                <span className="text-[13px] text-slate-500">Gorakhpur Mein Properties Listed</span>
               </div>
             </div>
           </div>
@@ -206,14 +206,14 @@ export default async function HomePage() {
         <div className="max-w-[1180px] mx-auto px-6 flex flex-wrap items-center justify-between gap-7">
           <div>
             <h3 className="text-2xl font-display font-semibold text-white">Your Sky Address Awaits</h3>
-            <p className="mt-1.5 text-[14.5px] text-[#c7d4e8]">Find your dream home in the world's most prestigious locations.</p>
+            <p className="mt-1.5 text-[14.5px] text-[#c7d4e8]">Gorakhpur mein apna sapno ka ghar, plot ya office — sab ek hi jagah pe.</p>
           </div>
           <NewsletterForm />
           <div className="flex items-center gap-3">
             <div className="icon-badge bg-white/10">📞</div>
             <div>
               <span className="block text-[12.5px] text-[#c7d4e8]">Call Us Anytime</span>
-              <b className="text-[17px]">+1 (800) 123 4567</b>
+              <b className="text-[17px]">+91 98765 43210</b>
             </div>
           </div>
         </div>

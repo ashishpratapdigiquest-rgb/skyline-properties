@@ -13,6 +13,9 @@ export function getImageUrl(image) {
 
   const trimmed = image.trim();
 
+  // Base64 data URI (from a direct file upload) — use as-is
+  if (trimmed.startsWith("data:image/")) return trimmed;
+
   // Already absolute (http/https) or protocol-relative
   if (/^https?:\/\//i.test(trimmed)) return trimmed;
   if (trimmed.startsWith("//")) return `https:${trimmed}`;

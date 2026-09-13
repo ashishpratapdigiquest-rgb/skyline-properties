@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export const metadata = { title: "About Us | Skyline Properties" };
+export const metadata = { title: "About Us | Skyline Properties Gorakhpur", description: "15+ saal se Gorakhpur, Uttar Pradesh mein trusted property dealer." };
 
 const values = [
   { icon: "🤝", title: "Transparency", desc: "Every price, fee, and detail laid out clearly, from first viewing to closing day." },
@@ -23,7 +23,7 @@ export default function AboutPage() {
         <div className="max-w-[1180px] mx-auto px-6">
           <p className="text-brand font-bold text-[13px] tracking-[.08em]">WHO WE ARE</p>
           <h1 className="font-display text-[38px] font-bold text-navy mt-1.5">Built on Trust, Elevated by Design</h1>
-          <p className="text-slate-500 max-w-lg mx-auto mt-3.5">For over 15 years, Skyline Properties has connected discerning homeowners with the world's most exceptional addresses.</p>
+          <p className="text-slate-500 max-w-lg mx-auto mt-3.5">15 saal se Skyline Properties Gorakhpur ke logo ko unke sapno ka ghar, plot aur office dilwane mein madad kar raha hai.</p>
         </div>
       </section>
 

@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import SmartImage from "@/components/Common/SmartImage";
 import { getImageUrl } from "@/lib/imageUrl";
 
 const TAG_STYLES = {
@@ -25,7 +25,7 @@ export default function PropertyCard({ property }) {
       aria-label={`View details for ${property.title}`}
     >
       <div className="relative h-[190px] bg-slate-100">
-        <Image
+        <SmartImage
           src={cover}
           alt={property.title || "Property photo"}
           fill

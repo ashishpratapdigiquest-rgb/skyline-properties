@@ -3,13 +3,15 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getProperties } from "@/lib/propertyApi";
 import { getStoredAdminKey, clearAdminKey, adminCreateProperty, adminUpdateProperty, adminDeleteProperty } from "@/lib/adminApi";
+import SmartImage from "@/components/Common/SmartImage";
+import { getImageUrl } from "@/lib/imageUrl";
 
 const EMPTY_FORM = {
   title: "", purpose: "sale", propertyType: "Apartment", status: "Ready to Move",
   city: "", area: "", address: "", latitude: "", longitude: "",
   price: "", priceDisplay: "", rentDisplay: "", beds: 0, baths: 0, areaSqft: "",
   floor: "", tag: "", featured: false, verified: false,
-  description: "", amenities: "", images: "",
+  description: "", amenities: "", images: [],
 };
 
 function toFormValues(p) {
@@ -17,7 +19,7 @@ function toFormValues(p) {
     ...EMPTY_FORM,
     ...p,
     amenities: (p.amenities || []).join(", "),
-    images: (p.images || []).join(", "),
+    images: p.images || [],
   };
 }
 
@@ -31,9 +33,18 @@ function toApiPayload(form) {
     latitude: form.latitude ? Number(form.latitude) : null,
     longitude: form.longitude ? Number(form.longitude) : null,
     amenities: form.amenities ? form.amenities.split(",").map((s) => s.trim()).filter(Boolean) : [],
-    images: form.images ? form.images.split(",").map((s) => s.trim()).filter(Boolean) : [],
+    images: (form.images || []).filter(Boolean),
     tag: form.tag || null,
   };
+}
+
+function fileToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 }
 
 export default function AdminPropertiesPage() {
@@ -84,6 +95,18 @@ export default function AdminPropertiesPage() {
 
   function updateField(field, value) {
     setForm((f) => ({ ...f, [field]: value }));
+  }
+
+  async function handleImageFiles(e) {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+    const dataUrls = await Promise.all(files.map(fileToDataUrl));
+    setForm((f) => ({ ...f, images: [...(f.images || []), ...dataUrls] }));
+    e.target.value = ""; // allow re-selecting the same file later
+  }
+
+  function removeImage(index) {
+    setForm((f) => ({ ...f, images: f.images.filter((_, i) => i !== index) }));
   }
 
   async function handleSubmit(e) {
@@ -212,7 +235,31 @@ export default function AdminPropertiesPage() {
               </div>
               <Field label="Description" as="textarea" value={form.description} onChange={(v) => updateField("description", v)} className="sm:col-span-2" />
               <Field label="Amenities (comma-separated)" value={form.amenities} onChange={(v) => updateField("amenities", v)} className="sm:col-span-2" placeholder="Gym, Pool, Parking" />
-              <Field label="Image URLs (comma-separated)" value={form.images} onChange={(v) => updateField("images", v)} className="sm:col-span-2" placeholder="https://... , https://..." />
+
+              <div className="sm:col-span-2">
+                <label className="block text-[13px] font-semibold text-navy mb-1.5">Photos</label>
+                <label className="flex items-center justify-center gap-2 border-2 border-dashed border-slate-300 rounded-lg py-6 cursor-pointer hover:border-brand hover:bg-brand-tint text-sm text-slate-500">
+                  <input type="file" accept="image/*" multiple onChange={handleImageFiles} className="hidden" />
+                  📷 Apne computer/phone se photo select karo (multiple choose kar sakte ho)
+                </label>
+                {form.images?.length > 0 && (
+                  <div className="grid grid-cols-4 sm:grid-cols-6 gap-2 mt-3">
+                    {form.images.map((img, i) => (
+                      <div key={i} className="relative aspect-square rounded-lg overflow-hidden border border-slate-200">
+                        <SmartImage src={getImageUrl(img)} alt={`Photo ${i + 1}`} fill className="object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => removeImage(i)}
+                          aria-label={`Remove photo ${i + 1}`}
+                          className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/60 text-white text-xs flex items-center justify-center"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             {error && <p className="text-red-500 text-sm mt-4">{error}</p>}

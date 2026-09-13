@@ -2,7 +2,7 @@ import Image from "next/image";
 import { getBlogPosts } from "@/lib/api";
 import NewsletterForm from "@/components/NewsletterForm";
 
-export const metadata = { title: "Blog | Skyline Properties" };
+export const metadata = { title: "Blog | Skyline Properties Gorakhpur", description: "Gorakhpur real estate market ki latest updates, guides aur tips." };
 
 export default async function BlogPage() {
   const posts = await getBlogPosts();

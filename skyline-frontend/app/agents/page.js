@@ -2,7 +2,7 @@ import Link from "next/link";
 import AgentCard from "@/components/AgentCard";
 import { getAgents } from "@/lib/api";
 
-export const metadata = { title: "Our Agents | Skyline Properties" };
+export const metadata = { title: "Our Agents | Skyline Properties Gorakhpur", description: "Gorakhpur ke verified property agents se milein — Taramandal, Golghar, Civil Lines aur poore shehar mein." };
 
 export default async function AgentsPage() {
   const agents = await getAgents();
