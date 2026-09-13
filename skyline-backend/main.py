@@ -3,7 +3,7 @@ Unique Property — FastAPI backend
 Serves properties, agents, blog posts, and accepts contact form submissions.
 Run locally:  uvicorn main:app --reload --port 8000
 """
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
 from typing import Optional
@@ -12,6 +12,14 @@ import os
 from datetime import datetime
 
 app = FastAPI(title="Unique Property API", version="1.0.0")
+
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "changeme")
+
+
+def require_admin(x_admin_key: Optional[str] = Header(default=None)):
+    if not x_admin_key or x_admin_key != ADMIN_PASSWORD:
+        raise HTTPException(status_code=401, detail="Invalid or missing admin key")
+    return True
 
 # Allow the Next.js frontend (local dev + deployed) to call this API.
 app.add_middleware(
@@ -31,6 +39,17 @@ def load_json(filename):
         return json.load(f)
 
 
+def save_json(filename, data):
+    with open(os.path.join(DATA_DIR, filename), "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2)
+
+
+def slugify(text):
+    import re
+    slug = re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+    return slug
+
+
 # ---------- Schemas ----------
 class ContactMessage(BaseModel):
     name: str
@@ -42,6 +61,38 @@ class ContactMessage(BaseModel):
 
 class NewsletterSignup(BaseModel):
     email: EmailStr
+
+
+class PropertyIn(BaseModel):
+    title: str
+    purpose: str = "sale"  # "sale" | "rent"
+    propertyType: str
+    status: Optional[str] = "Ready to Move"
+    city: str
+    area: Optional[str] = None
+    address: Optional[str] = None
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    price: float
+    priceDisplay: Optional[str] = None
+    rentDisplay: Optional[str] = None
+    beds: Optional[int] = 0
+    baths: Optional[int] = 0
+    areaSqft: Optional[float] = None
+    floor: Optional[str] = None
+    tag: Optional[str] = None
+    featured: Optional[bool] = False
+    verified: Optional[bool] = False
+    description: Optional[str] = ""
+    amenities: Optional[list] = []
+    images: Optional[list] = []
+
+
+class PropertyUpdate(PropertyIn):
+    title: Optional[str] = None
+    propertyType: Optional[str] = None
+    city: Optional[str] = None
+    price: Optional[float] = None
 
 
 # ---------- Routes ----------
@@ -194,6 +245,64 @@ def get_similar_properties(slug_or_id: str, limit: int = 3):
 @app.get("/api/agents")
 def get_agents():
     return load_json("agents.json")
+
+
+# ---------- Admin (protected via X-Admin-Key header) ----------
+@app.get("/api/admin/verify")
+def check_admin_key(x_admin_key: Optional[str] = Header(default=None)):
+    if not x_admin_key or x_admin_key != ADMIN_PASSWORD:
+        raise HTTPException(status_code=401, detail="Invalid admin key")
+    return {"success": True}
+
+
+@app.post("/api/properties")
+def create_property(payload: PropertyIn, x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    properties = load_json("properties.json")
+    new_id = max([p["id"] for p in properties], default=0) + 1
+    base_slug = slugify(f"{payload.title}-{payload.city}")
+    slug = base_slug
+    existing_slugs = {p["slug"] for p in properties}
+    suffix = 2
+    while slug in existing_slugs:
+        slug = f"{base_slug}-{suffix}"
+        suffix += 1
+
+    record = payload.dict()
+    record["id"] = new_id
+    record["slug"] = slug
+    record["createdAt"] = datetime.utcnow().strftime("%Y-%m-%d")
+    record["views"] = 0
+    if not record.get("priceDisplay"):
+        record["priceDisplay"] = f"${record['price']:,.0f}"
+
+    properties.append(record)
+    save_json("properties.json", properties)
+    return record
+
+
+@app.put("/api/properties/{slug_or_id}")
+def update_property(slug_or_id: str, payload: PropertyUpdate, x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    properties = load_json("properties.json")
+    for i, p in enumerate(properties):
+        if p.get("slug") == slug_or_id or str(p["id"]) == slug_or_id:
+            updates = {k: v for k, v in payload.dict().items() if v is not None}
+            properties[i] = {**p, **updates}
+            save_json("properties.json", properties)
+            return properties[i]
+    raise HTTPException(status_code=404, detail="Property not found")
+
+
+@app.delete("/api/properties/{slug_or_id}")
+def delete_property(slug_or_id: str, x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    properties = load_json("properties.json")
+    filtered = [p for p in properties if not (p.get("slug") == slug_or_id or str(p["id"]) == slug_or_id)]
+    if len(filtered) == len(properties):
+        raise HTTPException(status_code=404, detail="Property not found")
+    save_json("properties.json", filtered)
+    return {"success": True}
 
 
 @app.get("/api/blog")

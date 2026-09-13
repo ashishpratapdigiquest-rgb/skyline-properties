@@ -23,7 +23,14 @@
     "createdAt": "2026-08-20",
     "views": 1240,
     "description": "A striking full-floor penthouse in the heart of Downtown, offering panoramic river views, soaring 12-foot ceilings, and a private elevator landing. Floor-to-ceiling glass wraps the living and dining areas, opening onto a wraparound terrace built for entertaining.",
-    "amenities": ["Private Elevator", "Rooftop Terrace", "24/7 Concierge", "Gym", "Parking", "Pet Friendly"],
+    "amenities": [
+      "Private Elevator",
+      "Rooftop Terrace",
+      "24/7 Concierge",
+      "Gym",
+      "Parking",
+      "Pet Friendly"
+    ],
     "images": [
       "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
@@ -55,7 +62,13 @@
     "createdAt": "2026-09-01",
     "views": 860,
     "description": "Wake up to open bay views from every room. This rooftop residence features an infinity-edge plunge pool, an outdoor kitchen, and a primary suite with a spa-style bath overlooking the water.",
-    "amenities": ["Private Pool", "Boat Dock Access", "Outdoor Kitchen", "Gym", "Parking"],
+    "amenities": [
+      "Private Pool",
+      "Boat Dock Access",
+      "Outdoor Kitchen",
+      "Gym",
+      "Parking"
+    ],
     "images": [
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&q=80",
@@ -86,7 +99,14 @@
     "createdAt": "2026-07-15",
     "views": 2100,
     "description": "Sitting on the 45th floor of Chicago's most prestigious new tower, this residence pairs old-world craftsmanship \u2014 hand-laid marble, custom millwork \u2014 with smart-home technology throughout.",
-    "amenities": ["Smart Home", "Wine Cellar", "24/7 Concierge", "Gym", "Spa", "Parking"],
+    "amenities": [
+      "Smart Home",
+      "Wine Cellar",
+      "24/7 Concierge",
+      "Gym",
+      "Spa",
+      "Parking"
+    ],
     "images": [
       "https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=80",
@@ -104,7 +124,7 @@
     "area": "Sky Gardens",
     "address": "12 Garden Rise, Singapore 018956",
     "latitude": 1.2903,
-    "longitude": 103.8520,
+    "longitude": 103.852,
     "price": 1900000,
     "priceDisplay": "$1.9M",
     "rentDisplay": "$8,500/mo",
@@ -118,7 +138,13 @@
     "createdAt": "2026-08-28",
     "views": 540,
     "description": "A green oasis in the sky \u2014 this suite opens onto a private planted terrace with sweeping skyline views, designed for tranquil indoor-outdoor living.",
-    "amenities": ["Private Garden Terrace", "Gym", "Pool", "Parking", "Pet Friendly"],
+    "amenities": [
+      "Private Garden Terrace",
+      "Gym",
+      "Pool",
+      "Parking",
+      "Pet Friendly"
+    ],
     "images": [
       "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1519452575417-564c1401ecc0?auto=format&fit=crop&w=1200&q=80"
@@ -149,7 +175,12 @@
     "createdAt": "2026-09-05",
     "views": 310,
     "description": "An industrial-chic loft with exposed brick, oversized steel-frame windows, and unobstructed harbor views \u2014 walking distance to the Seaport district.",
-    "amenities": ["Exposed Brick", "Gym", "Roof Deck", "Parking"],
+    "amenities": [
+      "Exposed Brick",
+      "Gym",
+      "Roof Deck",
+      "Parking"
+    ],
     "images": [
       "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1200&q=80"
@@ -179,7 +210,15 @@
     "createdAt": "2026-06-30",
     "views": 3400,
     "description": "An ultra-luxury sky villa with a private infinity pool cantilevered over the marina, a home cinema, and staff quarters \u2014 one of only four residences on this floor plate.",
-    "amenities": ["Private Pool", "Home Cinema", "Staff Quarters", "24/7 Concierge", "Gym", "Spa", "Parking"],
+    "amenities": [
+      "Private Pool",
+      "Home Cinema",
+      "Staff Quarters",
+      "24/7 Concierge",
+      "Gym",
+      "Spa",
+      "Parking"
+    ],
     "images": [
       "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
@@ -197,7 +236,7 @@
     "area": "Midtown",
     "address": "350 Madison Ave, New York, NY 10017",
     "latitude": 40.7549,
-    "longitude": -73.9840,
+    "longitude": -73.984,
     "price": 1200000,
     "priceDisplay": "$1.2M",
     "rentDisplay": "$14,000/mo",
@@ -211,7 +250,12 @@
     "createdAt": "2026-08-10",
     "views": 180,
     "description": "Full-floor corner office suite with wraparound windows on two exposures, a boardroom, and move-in-ready fit-out in a landmark Midtown tower.",
-    "amenities": ["24/7 Concierge", "Parking", "Conference Rooms", "High-Speed Fiber"],
+    "amenities": [
+      "24/7 Concierge",
+      "Parking",
+      "Conference Rooms",
+      "High-Speed Fiber"
+    ],
     "images": [
       "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1444723121867-7a241cacace9?auto=format&fit=crop&w=1200&q=80"
@@ -227,8 +271,8 @@
     "city": "Austin",
     "area": "Riverside",
     "address": "Lot 4, Riverside Trail, Austin, TX 78704",
-    "latitude": 30.2500,
-    "longitude": -97.7500,
+    "latitude": 30.25,
+    "longitude": -97.75,
     "price": 950000,
     "priceDisplay": "$950K",
     "beds": 0,
@@ -241,7 +285,10 @@
     "createdAt": "2026-07-22",
     "views": 95,
     "description": "A rare riverside development parcel zoned for mixed-use, with approved plans for a boutique low-rise residential building.",
-    "amenities": ["River Frontage", "Zoned Mixed-Use"],
+    "amenities": [
+      "River Frontage",
+      "Zoned Mixed-Use"
+    ],
     "images": [
       "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80"
     ]
