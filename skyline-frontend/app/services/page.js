@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export const metadata = { title: "Services | Unique Property" };
+export const metadata = { title: "Services | Skyline Properties" };
 
 const services = [
   { icon: "🏠", title: "Buying a Home", desc: "From your first search to closing day, we guide you through financing, viewings, and negotiation with full transparency." },

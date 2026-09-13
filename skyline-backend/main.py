@@ -1,5 +1,5 @@
 """
-Unique Property — FastAPI backend
+Skyline Properties — FastAPI backend
 Serves properties, agents, blog posts, and accepts contact form submissions.
 Run locally:  uvicorn main:app --reload --port 8000
 """
@@ -11,7 +11,7 @@ import json
 import os
 from datetime import datetime
 
-app = FastAPI(title="Unique Property API", version="1.0.0")
+app = FastAPI(title="Skyline Properties API", version="1.0.0")
 
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "changeme")
 
@@ -98,7 +98,7 @@ class PropertyUpdate(PropertyIn):
 # ---------- Routes ----------
 @app.get("/")
 def root():
-    return {"status": "ok", "service": "Unique Property API"}
+    return {"status": "ok", "service": "Skyline Properties API"}
 
 
 SORT_OPTIONS = {
@@ -339,7 +339,7 @@ def submit_contact(payload: ContactMessage):
     entries.append(entry)
     with open(CONTACT_LOG, "w", encoding="utf-8") as f:
         json.dump(entries, f, indent=2)
-    return {"success": True, "message": "Thanks! A Unique Property agent will reach out shortly."}
+    return {"success": True, "message": "Thanks! A Skyline agent will reach out shortly."}
 
 
 @app.post("/api/newsletter")

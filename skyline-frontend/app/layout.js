@@ -3,8 +3,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export const metadata = {
-  title: "Unique Property | Find Your Unique Property",
-  description: "Premium living, prime locations. Browse 8,000+ luxury residences with Unique Property.",
+  title: "Skyline Properties | Live Above the Skyline",
+  description: "Premium living, prime locations. Browse 8,000+ luxury residences with Skyline Properties.",
 };
 
 export default function RootLayout({ children }) {

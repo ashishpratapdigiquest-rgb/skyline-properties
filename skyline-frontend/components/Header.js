@@ -28,8 +28,8 @@ export default function Header() {
             <rect x="31" y="4" width="7" height="32" rx="1" fill="#0d2545" />
           </svg>
           <span>
-            UNIQUE
-            <small className="block text-[9px] tracking-[.16em] text-brand font-semibold">PROPERTY</small>
+            SKYLINE
+            <small className="block text-[9px] tracking-[.16em] text-brand font-semibold">PROPERTIES</small>
           </span>
         </Link>
 

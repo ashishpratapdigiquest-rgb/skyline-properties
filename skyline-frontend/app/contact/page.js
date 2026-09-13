@@ -1,11 +1,11 @@
 import ContactForm from "@/components/ContactForm";
 
-export const metadata = { title: "Contact | Unique Property" };
+export const metadata = { title: "Contact | Skyline Properties" };
 
 const infoRows = [
   { icon: "📞", title: "Call Us", desc: "+1 (800) 123 4567" },
-  { icon: "✉️", title: "Email Us", desc: "hello@uniqueproperty.com" },
-  { icon: "📍", title: "Visit Us", desc: "200 Unique Avenue, Suite 4800, New York, NY 10001" },
+  { icon: "✉️", title: "Email Us", desc: "hello@skylineproperties.com" },
+  { icon: "📍", title: "Visit Us", desc: "200 Skyline Avenue, Suite 4800, New York, NY 10001" },
   { icon: "🕐", title: "Office Hours", desc: "Mon–Sat, 9:00 AM – 7:00 PM" },
 ];
 

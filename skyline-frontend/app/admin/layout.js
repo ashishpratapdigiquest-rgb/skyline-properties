@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Admin | Unique Property",
+  title: "Admin | Skyline Properties",
   robots: { index: false, follow: false },
 };
 

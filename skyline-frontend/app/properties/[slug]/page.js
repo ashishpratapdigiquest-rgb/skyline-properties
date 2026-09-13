@@ -13,11 +13,11 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://skyline-properties
 export async function generateMetadata({ params }) {
   const property = await getPropertyBySlug(params.slug);
   if (!property) {
-    return { title: "Property Not Found | Unique Property" };
+    return { title: "Property Not Found | Skyline Properties" };
   }
   const description = property.description?.slice(0, 155) || `${property.title} — ${property.city}`;
   return {
-    title: `${property.title} | Unique Property`,
+    title: `${property.title} | Skyline Properties`,
     description,
     alternates: { canonical: `/properties/${property.slug}` },
     openGraph: {
@@ -175,7 +175,7 @@ export default async function PropertyDetailsPage({ params }) {
           {/* Contact sidebar */}
           <div className="bg-brand-tint rounded-2xl p-7 h-fit lg:sticky lg:top-24">
             <h3 className="font-display text-lg font-semibold text-navy mb-2">Interested in this property?</h3>
-            <p className="text-slate-500 text-sm mb-5">Speak with a Unique Property specialist about {property.title}.</p>
+            <p className="text-slate-500 text-sm mb-5">Speak with a Skyline Properties specialist about {property.title}.</p>
             <Link href="/contact" className="btn btn-primary w-full justify-center">Enquire Now</Link>
             <a href="tel:+18001234567" className="btn btn-outline w-full justify-center mt-3">Call +1 (800) 123 4567</a>
           </div>

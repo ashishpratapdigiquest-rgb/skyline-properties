@@ -14,8 +14,8 @@ export default function Footer() {
                 <rect x="31" y="4" width="7" height="32" rx="1" fill="#fff" />
               </svg>
               <span>
-                UNIQUE
-                <small className="block text-[9px] tracking-[.16em] text-brand font-semibold">PROPERTY</small>
+                SKYLINE
+                <small className="block text-[9px] tracking-[.16em] text-brand font-semibold">PROPERTIES</small>
               </span>
             </Link>
             <p className="mt-3 text-[13.5px] leading-relaxed text-[#8a99b3]">
@@ -61,7 +61,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="border-t border-white/10 pt-5 text-center text-[12.5px] text-[#728198]">
-          © 2025 Unique Property. All rights reserved.
+          © 2025 Skyline Properties. All rights reserved.
         </div>
       </div>
     </footer>

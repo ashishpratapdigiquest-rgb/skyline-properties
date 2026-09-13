@@ -3,7 +3,7 @@ import PropertiesClient from "./PropertiesClient";
 import PropertySkeleton from "@/components/Common/PropertySkeleton";
 
 export const metadata = {
-  title: "Properties | Unique Property",
+  title: "Properties | Skyline Properties",
   description: "Search and filter 500+ verified luxury listings by location, price, type, and more.",
 };
 
