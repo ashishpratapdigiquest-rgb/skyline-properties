@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { href: "/admin/agents", label: "Agents", icon: "👤" },
   { href: "/admin/testimonials", label: "Testimonials", icon: "💬" },
   { href: "/admin/comments", label: "Comments", icon: "🗨️" },
+  { href: "/admin/settings", label: "Settings", icon: "⚙️" },
 ];
 
 export default function AdminSidebar() {

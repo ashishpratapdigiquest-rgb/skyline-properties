@@ -1,21 +1,29 @@
 import Link from "next/link";
 
-export default function Footer() {
+export default function Footer({ settings }) {
+  const siteName = settings?.site_name || "Skyline Properties";
+  const [logoTop, ...rest] = siteName.split(" ");
+  const logoBottom = rest.join(" ") || "PROPERTIES";
+
   return (
     <footer className="bg-[#0a1d38] text-[#aebbd1] pt-14 pb-6">
       <div className="max-w-[1180px] mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-[1.6fr_1fr_1fr_1fr] gap-9 mb-9">
           <div>
             <Link href="/" className="flex items-center gap-2.5 font-display font-bold text-white text-lg">
-              <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
-                <rect x="4" y="16" width="7" height="20" rx="1" fill="#1a56db" />
-                <rect x="13" y="8" width="7" height="28" rx="1" fill="#fff" />
-                <rect x="22" y="20" width="7" height="16" rx="1" fill="#1a56db" />
-                <rect x="31" y="4" width="7" height="32" rx="1" fill="#fff" />
-              </svg>
+              {settings?.logo_image ? (
+                <img src={settings.logo_image} alt={siteName} className="w-[34px] h-[34px] object-contain" />
+              ) : (
+                <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
+                  <rect x="4" y="16" width="7" height="20" rx="1" fill="#1a56db" />
+                  <rect x="13" y="8" width="7" height="28" rx="1" fill="#fff" />
+                  <rect x="22" y="20" width="7" height="16" rx="1" fill="#1a56db" />
+                  <rect x="31" y="4" width="7" height="32" rx="1" fill="#fff" />
+                </svg>
+              )}
               <span>
-                SKYLINE
-                <small className="block text-[9px] tracking-[.16em] text-brand font-semibold">PROPERTIES</small>
+                {logoTop.toUpperCase()}
+                <small className="block text-[9px] tracking-[.16em] text-brand font-semibold">{logoBottom.toUpperCase()}</small>
               </span>
             </Link>
             <p className="mt-3 text-[13.5px] leading-relaxed text-[#8a99b3]">
@@ -63,7 +71,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="border-t border-white/10 pt-5 text-center text-[12.5px] text-[#728198]">
-          © 2025 Skyline Properties. All rights reserved.
+          © 2025 {siteName}. All rights reserved.
         </div>
       </div>
     </footer>

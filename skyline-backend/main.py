@@ -165,6 +165,15 @@ class TestimonialUpdate(BaseModel):
     photo: Optional[str] = None
 
 
+class SiteSettingsUpdate(BaseModel):
+    site_name: Optional[str] = None
+    logo_image: Optional[str] = None
+    phone_number: Optional[str] = None
+    whatsapp_number: Optional[str] = None
+    email: Optional[str] = None
+    address: Optional[str] = None
+
+
 class PropertyIn(BaseModel):
     title: str
     purpose: str = "sale"  # "sale" | "rent"
@@ -622,6 +631,21 @@ def delete_comment(comment_id: int, x_admin_key: Optional[str] = Header(default=
         raise HTTPException(status_code=404, detail="Comment not found")
     save_json("comments.json", filtered)
     return {"success": True}
+
+
+@app.get("/api/settings")
+def get_settings():
+    return load_json("settings.json")
+
+
+@app.put("/api/settings")
+def update_settings(payload: SiteSettingsUpdate, x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    settings = load_json("settings.json")
+    updates = {k: v for k, v in payload.dict().items() if v is not None}
+    settings = {**settings, **updates}
+    save_json("settings.json", settings)
+    return settings
 
 
 @app.get("/api/testimonials")

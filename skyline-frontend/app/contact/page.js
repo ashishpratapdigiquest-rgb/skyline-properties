@@ -1,15 +1,18 @@
 import ContactForm from "@/components/ContactForm";
+import { getSettings } from "@/lib/settingsApi";
 
-export const metadata = { title: "Contact Us | Skyline Properties Gorakhpur", description: "Golghar, Gorakhpur mein humse milein ya call karein: +91 98765 43210" };
+export const metadata = { title: "Contact Us | Skyline Properties Gorakhpur", description: "Golghar, Gorakhpur mein humse milein ya call karein." };
 
-const infoRows = [
-  { icon: "📞", title: "Call Us", desc: "+91 98765 43210" },
-  { icon: "✉️", title: "Email Us", desc: "hello@skylineproperties.co.in" },
-  { icon: "📍", title: "Visit Us", desc: "Bank Road, Golghar, Gorakhpur, Uttar Pradesh 273001" },
-  { icon: "🕐", title: "Office Hours", desc: "Mon–Sat, 9:00 AM – 7:00 PM" },
-];
+export default async function ContactPage() {
+  const settings = await getSettings();
 
-export default function ContactPage() {
+  const infoRows = [
+    { icon: "📞", title: "Call Us", desc: settings.phone_number },
+    { icon: "✉️", title: "Email Us", desc: settings.email },
+    { icon: "📍", title: "Visit Us", desc: settings.address },
+    { icon: "🕐", title: "Office Hours", desc: "Mon–Sat, 9:00 AM – 7:00 PM" },
+  ];
+
   return (
     <>
       <section className="bg-gradient-to-b from-white to-brand-tint py-16 text-center">

@@ -13,23 +13,33 @@ const NAV_ITEMS = [
   { href: "/contact", label: "Contact" },
 ];
 
-export default function Header() {
+export default function Header({ settings }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+
+  const siteName = settings?.site_name || "Skyline Properties";
+  const [logoTop, ...rest] = siteName.split(" ");
+  const logoBottom = rest.join(" ") || "PROPERTIES";
+  const phone = settings?.phone_number || "+91 98765 43210";
+  const phoneHref = `tel:${phone.replace(/\s+/g, "")}`;
 
   return (
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200">
       <div className="max-w-[1180px] mx-auto px-6 py-4 flex items-center justify-between gap-6">
         <Link href="/" className="flex items-center gap-2.5 font-display font-bold text-navy text-lg">
-          <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
-            <rect x="4" y="16" width="7" height="20" rx="1" fill="#1a56db" />
-            <rect x="13" y="8" width="7" height="28" rx="1" fill="#0d2545" />
-            <rect x="22" y="20" width="7" height="16" rx="1" fill="#1a56db" />
-            <rect x="31" y="4" width="7" height="32" rx="1" fill="#0d2545" />
-          </svg>
+          {settings?.logo_image ? (
+            <img src={settings.logo_image} alt={siteName} className="w-[34px] h-[34px] object-contain" />
+          ) : (
+            <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
+              <rect x="4" y="16" width="7" height="20" rx="1" fill="#1a56db" />
+              <rect x="13" y="8" width="7" height="28" rx="1" fill="#0d2545" />
+              <rect x="22" y="20" width="7" height="16" rx="1" fill="#1a56db" />
+              <rect x="31" y="4" width="7" height="32" rx="1" fill="#0d2545" />
+            </svg>
+          )}
           <span>
-            SKYLINE
-            <small className="block text-[9px] tracking-[.16em] text-brand font-semibold">PROPERTIES</small>
+            {logoTop.toUpperCase()}
+            <small className="block text-[9px] tracking-[.16em] text-brand font-semibold">{logoBottom.toUpperCase()}</small>
           </span>
         </Link>
 
@@ -59,13 +69,13 @@ export default function Header() {
         </nav>
 
         <a
-          href="tel:+919876543210"
+          href={phoneHref}
           className="hidden sm:flex items-center gap-2.5 bg-navy text-white px-5 py-2.5 rounded-full font-semibold text-sm whitespace-nowrap"
         >
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
             <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8z" fill="#fff" />
           </svg>
-          +91 98765 43210
+          {phone}
         </a>
       </div>
     </header>

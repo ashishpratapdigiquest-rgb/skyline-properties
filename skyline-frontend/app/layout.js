@@ -2,6 +2,9 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { getSettings } from "@/lib/settingsApi";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Skyline Properties | Gorakhpur Ke Best Property Dealer",
@@ -14,43 +17,45 @@ export const metadata = {
   },
 };
 
-const localBusinessJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "RealEstateAgent",
-  name: "Skyline Properties",
-  image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=800&q=80",
-  telephone: "+91-98765-43210",
-  email: "hello@skylineproperties.co.in",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "Bank Road, Golghar",
-    addressLocality: "Gorakhpur",
-    addressRegion: "Uttar Pradesh",
-    postalCode: "273001",
-    addressCountry: "IN",
-  },
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: 26.7606,
-    longitude: 83.3732,
-  },
-  areaServed: {
-    "@type": "City",
-    name: "Gorakhpur",
-  },
-  openingHours: "Mo-Sa 09:00-19:00",
-};
+export default async function RootLayout({ children }) {
+  const settings = await getSettings();
 
-export default function RootLayout({ children }) {
+  const localBusinessJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "RealEstateAgent",
+    name: settings.site_name,
+    image: settings.logo_image || "https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=800&q=80",
+    telephone: settings.phone_number,
+    email: settings.email,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: settings.address,
+      addressLocality: "Gorakhpur",
+      addressRegion: "Uttar Pradesh",
+      postalCode: "273001",
+      addressCountry: "IN",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 26.7606,
+      longitude: 83.3732,
+    },
+    areaServed: {
+      "@type": "City",
+      name: "Gorakhpur",
+    },
+    openingHours: "Mo-Sa 09:00-19:00",
+  };
+
   return (
     <html lang="en-IN">
       <body className="font-sans text-slate-700 antialiased">
         {/* eslint-disable-next-line react/no-danger */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }} />
-        <Header />
+        <Header settings={settings} />
         {children}
-        <Footer />
-        <WhatsAppButton />
+        <Footer settings={settings} />
+        <WhatsAppButton whatsappNumber={settings.whatsapp_number} />
       </body>
     </html>
   );

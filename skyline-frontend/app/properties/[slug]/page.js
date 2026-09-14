@@ -8,6 +8,7 @@ import ShareButtons from "@/components/Property/ShareButtons";
 import FavoriteButton from "@/components/Property/FavoriteButton";
 import Breadcrumbs from "@/components/Property/Breadcrumbs";
 import EMICalculator from "@/components/EMICalculator";
+import { getSettings } from "@/lib/settingsApi";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://skyline-properties-iota.vercel.app";
 
@@ -32,6 +33,8 @@ export async function generateMetadata({ params }) {
 export default async function PropertyDetailsPage({ params }) {
   const property = await getPropertyBySlug(params.slug);
   if (!property) notFound();
+
+  const settings = await getSettings();
 
   const similar = await getSimilarProperties(params.slug, 3);
   const images = getImageUrls(property.images);
@@ -179,7 +182,7 @@ export default async function PropertyDetailsPage({ params }) {
               <h3 className="font-display text-lg font-semibold text-navy mb-2">Interested in this property?</h3>
               <p className="text-slate-500 text-sm mb-5">Speak with a Skyline Properties specialist about {property.title}.</p>
               <Link href="/contact" className="btn btn-primary w-full justify-center">Enquire Now</Link>
-              <a href="tel:+919876543210" className="btn btn-outline w-full justify-center mt-3">Call +91 98765 43210</a>
+              <a href={`tel:${settings.phone_number.replace(/\s+/g, "")}`} className="btn btn-outline w-full justify-center mt-3">Call {settings.phone_number}</a>
             </div>
             {property.purpose === "sale" && <EMICalculator defaultAmount={property.price} />}
           </div>

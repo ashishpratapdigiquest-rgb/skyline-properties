@@ -1,8 +1,7 @@
-const WHATSAPP_NUMBER = "919876543210"; // country code + number, no + or spaces
 const DEFAULT_MESSAGE = "Namaste! Mujhe Skyline Properties ke baare mein jaankari chahiye.";
 
-export default function WhatsAppButton() {
-  const href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(DEFAULT_MESSAGE)}`;
+export default function WhatsAppButton({ whatsappNumber = "919876543210" }) {
+  const href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(DEFAULT_MESSAGE)}`;
 
   return (
     <a

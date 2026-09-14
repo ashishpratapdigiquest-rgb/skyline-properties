@@ -171,3 +171,14 @@ export async function adminDeleteTestimonial(key, id) {
   if (!res.ok) throw new Error((await res.json()).detail || "Failed to delete testimonial");
   return res.json();
 }
+
+// ---- Site Settings ----
+export async function adminUpdateSettings(key, data) {
+  const res = await fetch(`${API_URL}/api/settings`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json", "X-Admin-Key": key },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error((await res.json()).detail || "Failed to update settings");
+  return res.json();
+}
