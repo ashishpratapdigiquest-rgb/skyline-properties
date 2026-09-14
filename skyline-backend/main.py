@@ -113,6 +113,28 @@ class PropertyAlert(BaseModel):
     max_budget: Optional[float] = None
 
 
+class BlogPostIn(BaseModel):
+    title: str
+    excerpt: str
+    content: str
+    image: Optional[str] = None
+    author: Optional[str] = "Skyline Properties Team"
+
+
+class BlogPostUpdate(BaseModel):
+    title: Optional[str] = None
+    excerpt: Optional[str] = None
+    content: Optional[str] = None
+    image: Optional[str] = None
+    author: Optional[str] = None
+
+
+class CommentIn(BaseModel):
+    name: str
+    email: EmailStr
+    comment: str
+
+
 class PropertyIn(BaseModel):
     title: str
     purpose: str = "sale"  # "sale" | "rent"
@@ -417,6 +439,121 @@ def get_blog_post(slug: str):
         if post["slug"] == slug:
             return post
     raise HTTPException(status_code=404, detail="Post not found")
+
+
+@app.post("/api/blog")
+def create_blog_post(payload: BlogPostIn, x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    posts = load_json("blog.json")
+    new_id = max([p["id"] for p in posts], default=0) + 1
+    base_slug = slugify(payload.title)
+    slug = base_slug
+    existing_slugs = {p["slug"] for p in posts}
+    suffix = 2
+    while slug in existing_slugs:
+        slug = f"{base_slug}-{suffix}"
+        suffix += 1
+
+    record = payload.dict()
+    record["id"] = new_id
+    record["slug"] = slug
+    record["date"] = datetime.utcnow().strftime("%b %d, %Y")
+    if not record.get("image"):
+        record["image"] = "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=700&q=80"
+
+    posts.insert(0, record)  # newest first
+    save_json("blog.json", posts)
+    return record
+
+
+@app.put("/api/blog/{slug}")
+def update_blog_post(slug: str, payload: BlogPostUpdate, x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    posts = load_json("blog.json")
+    for i, p in enumerate(posts):
+        if p.get("slug") == slug:
+            updates = {k: v for k, v in payload.dict().items() if v is not None}
+            posts[i] = {**p, **updates}
+            save_json("blog.json", posts)
+            return posts[i]
+    raise HTTPException(status_code=404, detail="Post not found")
+
+
+@app.delete("/api/blog/{slug}")
+def delete_blog_post(slug: str, x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    posts = load_json("blog.json")
+    filtered = [p for p in posts if p.get("slug") != slug]
+    if len(filtered) == len(posts):
+        raise HTTPException(status_code=404, detail="Post not found")
+    save_json("blog.json", filtered)
+    # Also clean up comments belonging to the deleted post
+    comments = load_json("comments.json")
+    save_json("comments.json", [c for c in comments if c.get("blog_slug") != slug])
+    return {"success": True}
+
+
+# ---------- Blog comments (require admin approval before showing publicly) ----------
+@app.get("/api/blog/{slug}/comments")
+def get_approved_comments(slug: str):
+    comments = load_json("comments.json")
+    return [c for c in comments if c.get("blog_slug") == slug and c.get("approved")]
+
+
+@app.post("/api/blog/{slug}/comments")
+def submit_comment(slug: str, payload: CommentIn):
+    posts = load_json("blog.json")
+    if not any(p["slug"] == slug for p in posts):
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    comments = load_json("comments.json")
+    new_id = max([c["id"] for c in comments], default=0) + 1
+    comment = {
+        "id": new_id,
+        "blog_slug": slug,
+        "name": payload.name,
+        "email": payload.email,
+        "comment": payload.comment,
+        "created_at": datetime.utcnow().isoformat(),
+        "approved": False,
+    }
+    comments.append(comment)
+    save_json("comments.json", comments)
+    return {"success": True, "message": "Comment submit ho gaya! Admin approve karne ke baad website par dikhega."}
+
+
+@app.get("/api/admin/comments")
+def list_all_comments(status: Optional[str] = None, x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    comments = load_json("comments.json")
+    if status == "pending":
+        comments = [c for c in comments if not c.get("approved")]
+    elif status == "approved":
+        comments = [c for c in comments if c.get("approved")]
+    return sorted(comments, key=lambda c: c.get("created_at", ""), reverse=True)
+
+
+@app.put("/api/admin/comments/{comment_id}/approve")
+def approve_comment(comment_id: int, x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    comments = load_json("comments.json")
+    for c in comments:
+        if c["id"] == comment_id:
+            c["approved"] = True
+            save_json("comments.json", comments)
+            return c
+    raise HTTPException(status_code=404, detail="Comment not found")
+
+
+@app.delete("/api/admin/comments/{comment_id}")
+def delete_comment(comment_id: int, x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    comments = load_json("comments.json")
+    filtered = [c for c in comments if c["id"] != comment_id]
+    if len(filtered) == len(comments):
+        raise HTTPException(status_code=404, detail="Comment not found")
+    save_json("comments.json", filtered)
+    return {"success": True}
 
 
 @app.get("/api/testimonials")

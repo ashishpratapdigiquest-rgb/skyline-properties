@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { getBlogPosts } from "@/lib/api";
+import Link from "next/link";
+import { getBlogPosts } from "@/lib/blogApi";
 import NewsletterForm from "@/components/NewsletterForm";
 
 export const metadata = { title: "Blog | Skyline Properties Gorakhpur", description: "Gorakhpur real estate market ki latest updates, guides aur tips." };
@@ -20,7 +21,7 @@ export default async function BlogPage() {
       <section className="py-16">
         <div className="max-w-[1180px] mx-auto px-6 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map((post) => (
-            <article key={post.id} className="bg-white border border-slate-200 rounded-[10px] overflow-hidden shadow-card">
+            <Link key={post.id} href={`/blog/${post.slug}`} className="block bg-white border border-slate-200 rounded-[10px] overflow-hidden shadow-card hover:shadow-elevated transition-shadow">
               <div className="relative h-[180px]">
                 <Image src={post.image} alt={post.title} fill className="object-cover" />
               </div>
@@ -28,9 +29,9 @@ export default async function BlogPage() {
                 <div className="text-brand text-xs font-bold tracking-wide mb-2 uppercase">{post.date}</div>
                 <h3 className="font-display text-[16.5px] font-semibold text-navy mb-2">{post.title}</h3>
                 <p className="text-slate-500 text-[13.5px] leading-relaxed">{post.excerpt}</p>
-                <span className="inline-flex items-center gap-1.5 text-brand font-semibold text-[13.5px] mt-3.5 cursor-pointer">Read More →</span>
+                <span className="inline-flex items-center gap-1.5 text-brand font-semibold text-[13.5px] mt-3.5">Read More →</span>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       </section>

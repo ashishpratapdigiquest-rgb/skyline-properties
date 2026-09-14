@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { getProperties } from "@/lib/propertyApi";
 import { getStoredAdminKey, clearAdminKey, adminCreateProperty, adminUpdateProperty, adminDeleteProperty } from "@/lib/adminApi";
 import SmartImage from "@/components/Common/SmartImage";
@@ -155,6 +156,8 @@ export default function AdminPropertiesPage() {
         </div>
         <div className="flex gap-3">
           <button onClick={openAddForm} className="btn btn-primary">+ Add New Property</button>
+          <Link href="/admin/blog" className="btn btn-outline">Blog</Link>
+          <Link href="/admin/comments" className="btn btn-outline">Comments</Link>
           <button onClick={handleLogout} className="btn btn-outline">Log Out</button>
         </div>
       </div>
