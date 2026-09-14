@@ -50,12 +50,9 @@ export default function AdminCommentsPage() {
 
   return (
     <div className="max-w-[900px] mx-auto px-6 py-10">
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-        <div>
-          <h1 className="font-display text-2xl font-bold text-navy">Moderate Comments</h1>
-          <p className="text-slate-500 text-sm mt-1">Comments sirf approve karne ke baad hi blog par public dikhte hain.</p>
-        </div>
-        <Link href="/admin/blog" className="btn btn-outline">Back to Blog</Link>
+      <div className="mb-6">
+        <h1 className="font-display text-2xl font-bold text-navy">Moderate Comments</h1>
+        <p className="text-slate-500 text-sm mt-1">Comments sirf approve karne ke baad hi blog par public dikhte hain.</p>
       </div>
 
       <div className="flex gap-2 mb-6">

@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { getTestimonials } from "@/lib/api";
 import { getStoredAdminKey, adminCreateTestimonial, adminUpdateTestimonial, adminDeleteTestimonial } from "@/lib/adminApi";
 
@@ -92,12 +91,7 @@ export default function AdminTestimonialsPage() {
           <h1 className="font-display text-2xl font-bold text-navy">Manage Testimonials</h1>
           <p className="text-slate-500 text-sm mt-1">Add, edit, or remove customer reviews shown on the homepage.</p>
         </div>
-        <div className="flex gap-3">
-          <Link href="/admin/properties" className="btn btn-outline">Properties</Link>
-          <Link href="/admin/blog" className="btn btn-outline">Blog</Link>
-          <Link href="/admin/agents" className="btn btn-outline">Agents</Link>
-          <button onClick={openAdd} className="btn btn-primary">+ Add Testimonial</button>
-        </div>
+        <button onClick={openAdd} className="btn btn-primary">+ Add Testimonial</button>
       </div>
 
       {loading ? (

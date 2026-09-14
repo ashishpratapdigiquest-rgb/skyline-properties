@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { getAgents } from "@/lib/api";
 import { getStoredAdminKey, adminCreateAgent, adminUpdateAgent, adminDeleteAgent } from "@/lib/adminApi";
 
@@ -92,12 +91,7 @@ export default function AdminAgentsPage() {
           <h1 className="font-display text-2xl font-bold text-navy">Manage Agents</h1>
           <p className="text-slate-500 text-sm mt-1">Add, edit, or remove agent profiles shown on the site.</p>
         </div>
-        <div className="flex gap-3">
-          <Link href="/admin/properties" className="btn btn-outline">Properties</Link>
-          <Link href="/admin/blog" className="btn btn-outline">Blog</Link>
-          <Link href="/admin/testimonials" className="btn btn-outline">Testimonials</Link>
-          <button onClick={openAdd} className="btn btn-primary">+ Add Agent</button>
-        </div>
+        <button onClick={openAdd} className="btn btn-primary">+ Add Agent</button>
       </div>
 
       {loading ? (
