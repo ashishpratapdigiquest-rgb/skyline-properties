@@ -135,6 +135,36 @@ class CommentIn(BaseModel):
     comment: str
 
 
+class AgentIn(BaseModel):
+    name: str
+    role: str
+    phone: str
+    rating: int = 5
+    photo: Optional[str] = None
+
+
+class AgentUpdate(BaseModel):
+    name: Optional[str] = None
+    role: Optional[str] = None
+    phone: Optional[str] = None
+    rating: Optional[int] = None
+    photo: Optional[str] = None
+
+
+class TestimonialIn(BaseModel):
+    name: str
+    rating: int = 5
+    quote: str
+    photo: Optional[str] = None
+
+
+class TestimonialUpdate(BaseModel):
+    name: Optional[str] = None
+    rating: Optional[int] = None
+    quote: Optional[str] = None
+    photo: Optional[str] = None
+
+
 class PropertyIn(BaseModel):
     title: str
     purpose: str = "sale"  # "sale" | "rent"
@@ -327,6 +357,44 @@ def get_similar_properties(slug_or_id: str, limit: int = 3):
 @app.get("/api/agents")
 def get_agents():
     return load_json("agents.json")
+
+
+@app.post("/api/agents")
+def create_agent(payload: AgentIn, x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    agents = load_json("agents.json")
+    new_id = max([a["id"] for a in agents], default=0) + 1
+    record = payload.dict()
+    record["id"] = new_id
+    if not record.get("photo"):
+        record["photo"] = "https://randomuser.me/api/portraits/lego/1.jpg"
+    agents.append(record)
+    save_json("agents.json", agents)
+    return record
+
+
+@app.put("/api/agents/{agent_id}")
+def update_agent(agent_id: int, payload: AgentUpdate, x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    agents = load_json("agents.json")
+    for i, a in enumerate(agents):
+        if a["id"] == agent_id:
+            updates = {k: v for k, v in payload.dict().items() if v is not None}
+            agents[i] = {**a, **updates}
+            save_json("agents.json", agents)
+            return agents[i]
+    raise HTTPException(status_code=404, detail="Agent not found")
+
+
+@app.delete("/api/agents/{agent_id}")
+def delete_agent(agent_id: int, x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    agents = load_json("agents.json")
+    filtered = [a for a in agents if a["id"] != agent_id]
+    if len(filtered) == len(agents):
+        raise HTTPException(status_code=404, detail="Agent not found")
+    save_json("agents.json", filtered)
+    return {"success": True}
 
 
 # ---------- Admin (protected via X-Admin-Key header) ----------
@@ -559,6 +627,44 @@ def delete_comment(comment_id: int, x_admin_key: Optional[str] = Header(default=
 @app.get("/api/testimonials")
 def get_testimonials():
     return load_json("testimonials.json")
+
+
+@app.post("/api/testimonials")
+def create_testimonial(payload: TestimonialIn, x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    testimonials = load_json("testimonials.json")
+    new_id = max([t["id"] for t in testimonials], default=0) + 1
+    record = payload.dict()
+    record["id"] = new_id
+    if not record.get("photo"):
+        record["photo"] = "https://randomuser.me/api/portraits/lego/2.jpg"
+    testimonials.append(record)
+    save_json("testimonials.json", testimonials)
+    return record
+
+
+@app.put("/api/testimonials/{testimonial_id}")
+def update_testimonial(testimonial_id: int, payload: TestimonialUpdate, x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    testimonials = load_json("testimonials.json")
+    for i, t in enumerate(testimonials):
+        if t["id"] == testimonial_id:
+            updates = {k: v for k, v in payload.dict().items() if v is not None}
+            testimonials[i] = {**t, **updates}
+            save_json("testimonials.json", testimonials)
+            return testimonials[i]
+    raise HTTPException(status_code=404, detail="Testimonial not found")
+
+
+@app.delete("/api/testimonials/{testimonial_id}")
+def delete_testimonial(testimonial_id: int, x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    testimonials = load_json("testimonials.json")
+    filtered = [t for t in testimonials if t["id"] != testimonial_id]
+    if len(filtered) == len(testimonials):
+        raise HTTPException(status_code=404, detail="Testimonial not found")
+    save_json("testimonials.json", filtered)
+    return {"success": True}
 
 
 @app.post("/api/contact")

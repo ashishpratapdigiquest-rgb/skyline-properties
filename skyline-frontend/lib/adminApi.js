@@ -111,3 +111,63 @@ export async function adminDeleteComment(key, id) {
   if (!res.ok) throw new Error("Failed to delete comment");
   return res.json();
 }
+
+// ---- Agents ----
+export async function adminCreateAgent(key, data) {
+  const res = await fetch(`${API_URL}/api/agents`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-Admin-Key": key },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error((await res.json()).detail || "Failed to create agent");
+  return res.json();
+}
+
+export async function adminUpdateAgent(key, id, data) {
+  const res = await fetch(`${API_URL}/api/agents/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json", "X-Admin-Key": key },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error((await res.json()).detail || "Failed to update agent");
+  return res.json();
+}
+
+export async function adminDeleteAgent(key, id) {
+  const res = await fetch(`${API_URL}/api/agents/${id}`, {
+    method: "DELETE",
+    headers: { "X-Admin-Key": key },
+  });
+  if (!res.ok) throw new Error((await res.json()).detail || "Failed to delete agent");
+  return res.json();
+}
+
+// ---- Testimonials ----
+export async function adminCreateTestimonial(key, data) {
+  const res = await fetch(`${API_URL}/api/testimonials`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-Admin-Key": key },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error((await res.json()).detail || "Failed to create testimonial");
+  return res.json();
+}
+
+export async function adminUpdateTestimonial(key, id, data) {
+  const res = await fetch(`${API_URL}/api/testimonials/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json", "X-Admin-Key": key },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error((await res.json()).detail || "Failed to update testimonial");
+  return res.json();
+}
+
+export async function adminDeleteTestimonial(key, id) {
+  const res = await fetch(`${API_URL}/api/testimonials/${id}`, {
+    method: "DELETE",
+    headers: { "X-Admin-Key": key },
+  });
+  if (!res.ok) throw new Error((await res.json()).detail || "Failed to delete testimonial");
+  return res.json();
+}

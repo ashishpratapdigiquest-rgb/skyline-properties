@@ -157,6 +157,8 @@ export default function AdminPropertiesPage() {
         <div className="flex gap-3">
           <button onClick={openAddForm} className="btn btn-primary">+ Add New Property</button>
           <Link href="/admin/blog" className="btn btn-outline">Blog</Link>
+          <Link href="/admin/agents" className="btn btn-outline">Agents</Link>
+          <Link href="/admin/testimonials" className="btn btn-outline">Testimonials</Link>
           <Link href="/admin/comments" className="btn btn-outline">Comments</Link>
           <button onClick={handleLogout} className="btn btn-outline">Log Out</button>
         </div>

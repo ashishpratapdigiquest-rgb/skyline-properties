@@ -1,10 +1,66 @@
 [
-  {"id": 1, "name": "Rajesh Kumar Srivastava", "role": "Senior Property Consultant", "phone": "+91 98765 43210", "rating": 5, "photo": "https://randomuser.me/api/portraits/men/32.jpg"},
-  {"id": 2, "name": "Priya Tiwari", "role": "Residential Sales Expert", "phone": "+91 98765 43211", "rating": 5, "photo": "https://randomuser.me/api/portraits/women/44.jpg"},
-  {"id": 3, "name": "Amit Singh", "role": "Investment Advisor", "phone": "+91 98765 43212", "rating": 4, "photo": "https://randomuser.me/api/portraits/men/54.jpg"},
-  {"id": 4, "name": "Neha Gupta", "role": "Rental & Relocation Specialist", "phone": "+91 98765 43213", "rating": 5, "photo": "https://randomuser.me/api/portraits/women/68.jpg"},
-  {"id": 5, "name": "Manoj Pandey", "role": "Commercial Property Expert", "phone": "+91 98765 43214", "rating": 5, "photo": "https://randomuser.me/api/portraits/men/22.jpg"},
-  {"id": 6, "name": "Sunita Mishra", "role": "Plot & Land Specialist", "phone": "+91 98765 43215", "rating": 4, "photo": "https://randomuser.me/api/portraits/women/12.jpg"},
-  {"id": 7, "name": "Vikas Yadav", "role": "New Project Advisor", "phone": "+91 98765 43216", "rating": 5, "photo": "https://randomuser.me/api/portraits/men/41.jpg"},
-  {"id": 8, "name": "Anjali Verma", "role": "Customer Relationship Manager", "phone": "+91 98765 43217", "rating": 5, "photo": "https://randomuser.me/api/portraits/women/56.jpg"}
+  {
+    "id": 1,
+    "name": "Rajesh Kumar Srivastava",
+    "role": "Senior Property Consultant",
+    "phone": "+91 98765 43210",
+    "rating": 5,
+    "photo": "https://randomuser.me/api/portraits/men/32.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Priya Tiwari",
+    "role": "Residential Sales Expert",
+    "phone": "+91 98765 43211",
+    "rating": 5,
+    "photo": "https://randomuser.me/api/portraits/women/44.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Amit Singh",
+    "role": "Investment Advisor",
+    "phone": "+91 98765 43212",
+    "rating": 4,
+    "photo": "https://randomuser.me/api/portraits/men/54.jpg"
+  },
+  {
+    "id": 4,
+    "name": "Neha Gupta",
+    "role": "Rental & Relocation Specialist",
+    "phone": "+91 98765 43213",
+    "rating": 5,
+    "photo": "https://randomuser.me/api/portraits/women/68.jpg"
+  },
+  {
+    "id": 5,
+    "name": "Manoj Pandey",
+    "role": "Commercial Property Expert",
+    "phone": "+91 98765 43214",
+    "rating": 5,
+    "photo": "https://randomuser.me/api/portraits/men/22.jpg"
+  },
+  {
+    "id": 6,
+    "name": "Sunita Mishra",
+    "role": "Plot & Land Specialist",
+    "phone": "+91 98765 43215",
+    "rating": 4,
+    "photo": "https://randomuser.me/api/portraits/women/12.jpg"
+  },
+  {
+    "id": 7,
+    "name": "Vikas Yadav",
+    "role": "New Project Advisor",
+    "phone": "+91 98765 43216",
+    "rating": 5,
+    "photo": "https://randomuser.me/api/portraits/men/41.jpg"
+  },
+  {
+    "id": 8,
+    "name": "Anjali Verma",
+    "role": "Customer Relationship Manager",
+    "phone": "+91 98765 43217",
+    "rating": 5,
+    "photo": "https://randomuser.me/api/portraits/women/56.jpg"
+  }
 ]
