@@ -72,3 +72,20 @@ export async function getPropertyTypes() {
 export async function getPropertyLocations() {
   return safeGet(`/api/locations`, []);
 }
+
+export async function getAreas() {
+  return safeGet(`/api/areas`, []);
+}
+
+export async function createPropertyAlert(payload) {
+  try {
+    const res = await fetch(`${API_URL}/api/property-alerts`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    return await res.json();
+  } catch (err) {
+    return { success: false, message: "Could not reach the server. Please try again shortly." };
+  }
+}

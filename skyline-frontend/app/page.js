@@ -126,10 +126,10 @@ export default async function HomePage() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4.5">
             {locations.map((loc) => (
-              <div key={loc.name} className="relative rounded-xl overflow-hidden h-[120px]">
-                <Image src={loc.image} alt={loc.name} fill className="object-cover brightness-[.65]" />
+              <Link key={loc.name} href={`/areas/${loc.name.toLowerCase().replace(/\s+/g, "-")}`} className="relative rounded-xl overflow-hidden h-[120px] group">
+                <Image src={loc.image} alt={loc.name} fill className="object-cover brightness-[.65] group-hover:scale-105 transition-transform duration-300" />
                 <span className="absolute bottom-3 left-3.5 text-white font-semibold text-[14.5px]">{loc.name}</span>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

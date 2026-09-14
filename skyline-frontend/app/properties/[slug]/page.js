@@ -7,6 +7,7 @@ import PropertyCard from "@/components/Property/PropertyCard";
 import ShareButtons from "@/components/Property/ShareButtons";
 import FavoriteButton from "@/components/Property/FavoriteButton";
 import Breadcrumbs from "@/components/Property/Breadcrumbs";
+import EMICalculator from "@/components/EMICalculator";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://skyline-properties-iota.vercel.app";
 
@@ -173,11 +174,14 @@ export default async function PropertyDetailsPage({ params }) {
           </div>
 
           {/* Contact sidebar */}
-          <div className="bg-brand-tint rounded-2xl p-7 h-fit lg:sticky lg:top-24">
-            <h3 className="font-display text-lg font-semibold text-navy mb-2">Interested in this property?</h3>
-            <p className="text-slate-500 text-sm mb-5">Speak with a Skyline Properties specialist about {property.title}.</p>
-            <Link href="/contact" className="btn btn-primary w-full justify-center">Enquire Now</Link>
-            <a href="tel:+919876543210" className="btn btn-outline w-full justify-center mt-3">Call +91 98765 43210</a>
+          <div className="space-y-6 h-fit lg:sticky lg:top-24">
+            <div className="bg-brand-tint rounded-2xl p-7">
+              <h3 className="font-display text-lg font-semibold text-navy mb-2">Interested in this property?</h3>
+              <p className="text-slate-500 text-sm mb-5">Speak with a Skyline Properties specialist about {property.title}.</p>
+              <Link href="/contact" className="btn btn-primary w-full justify-center">Enquire Now</Link>
+              <a href="tel:+919876543210" className="btn btn-outline w-full justify-center mt-3">Call +91 98765 43210</a>
+            </div>
+            {property.purpose === "sale" && <EMICalculator defaultAmount={property.price} />}
           </div>
         </div>
       </section>

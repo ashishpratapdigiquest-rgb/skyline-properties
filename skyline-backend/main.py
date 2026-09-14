@@ -63,6 +63,16 @@ class NewsletterSignup(BaseModel):
     email: EmailStr
 
 
+class PropertyAlert(BaseModel):
+    name: str
+    phone: str
+    purpose: Optional[str] = None
+    city: Optional[str] = "Gorakhpur"
+    area: Optional[str] = None
+    property_type: Optional[str] = None
+    max_budget: Optional[float] = None
+
+
 class PropertyIn(BaseModel):
     title: str
     purpose: str = "sale"  # "sale" | "rent"
@@ -114,6 +124,7 @@ SORT_OPTIONS = {
 def get_properties(
     q: Optional[str] = None,
     city: Optional[str] = None,
+    area: Optional[str] = None,
     property_type: Optional[str] = None,
     purpose: Optional[str] = None,
     min_price: Optional[float] = None,
@@ -145,6 +156,8 @@ def get_properties(
         ]
     if city:
         properties = [p for p in properties if city.lower() in p.get("city", "").lower()]
+    if area:
+        properties = [p for p in properties if area.lower() in p.get("area", "").lower()]
     if property_type:
         properties = [p for p in properties if p.get("propertyType", "").lower() == property_type.lower()]
     if purpose:
@@ -210,6 +223,13 @@ def get_locations():
     properties = load_json("properties.json")
     cities = sorted({p["city"] for p in properties if p.get("city")})
     return cities
+
+
+@app.get("/api/areas")
+def get_areas():
+    properties = load_json("properties.json")
+    areas = sorted({p["area"] for p in properties if p.get("area")})
+    return areas
 
 
 @app.get("/api/properties/{slug_or_id}")
@@ -346,3 +366,31 @@ def submit_contact(payload: ContactMessage):
 def subscribe_newsletter(payload: NewsletterSignup):
     # In production, push this to an email provider (Mailchimp, Resend, etc.)
     return {"success": True, "message": f"Subscribed {payload.email} successfully."}
+
+
+ALERTS_LOG = os.path.join(DATA_DIR, "property_alerts.json")
+
+
+@app.post("/api/property-alerts")
+def create_property_alert(payload: PropertyAlert):
+    """
+    Captures a buyer's search criteria so the team can follow up when a
+    matching property is listed. NOTE: this only stores the request — it
+    does not (yet) send automated WhatsApp/email/SMS notifications. Wiring
+    that up needs a messaging provider (e.g. Twilio, WhatsApp Business API)
+    and a scheduled job that matches new listings against saved alerts.
+    """
+    os.makedirs(DATA_DIR, exist_ok=True)
+    entries = []
+    if os.path.exists(ALERTS_LOG):
+        with open(ALERTS_LOG, "r", encoding="utf-8") as f:
+            try:
+                entries = json.load(f)
+            except json.JSONDecodeError:
+                entries = []
+    entry = payload.dict()
+    entry["created_at"] = datetime.utcnow().isoformat()
+    entries.append(entry)
+    with open(ALERTS_LOG, "w", encoding="utf-8") as f:
+        json.dump(entries, f, indent=2)
+    return {"success": True, "message": "Alert saved! Hum matching property milte hi aapko contact karenge."}

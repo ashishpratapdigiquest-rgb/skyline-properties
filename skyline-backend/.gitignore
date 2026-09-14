@@ -3,3 +3,4 @@ __pycache__
 *.pyc
 .env
 data/contact_submissions.json
+data/property_alerts.json

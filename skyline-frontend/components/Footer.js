@@ -34,9 +34,10 @@ export default function Footer() {
             <h5 className="text-white text-[14.5px] mb-4">Explore</h5>
             <ul className="space-y-2.5 text-[13.5px]">
               <li><Link href="/properties" className="hover:text-white">Properties</Link></li>
-              <li><Link href="/properties" className="hover:text-white">Locations</Link></li>
+              <li><Link href="/areas" className="hover:text-white">Areas in Gorakhpur</Link></li>
               <li><Link href="/about" className="hover:text-white">About Us</Link></li>
               <li><Link href="/blog" className="hover:text-white">Blog</Link></li>
+              <li><Link href="/emi-calculator" className="hover:text-white">EMI Calculator</Link></li>
             </ul>
           </div>
 
@@ -54,6 +55,7 @@ export default function Footer() {
             <h5 className="text-white text-[14.5px] mb-4">Support</h5>
             <ul className="space-y-2.5 text-[13.5px]">
               <li><Link href="/contact" className="hover:text-white">Help Center</Link></li>
+              <li><Link href="/property-alerts" className="hover:text-white">Property Alerts</Link></li>
               <li><Link href="/contact" className="hover:text-white">Terms &amp; Conditions</Link></li>
               <li><Link href="/contact" className="hover:text-white">Privacy Policy</Link></li>
               <li><Link href="/contact" className="hover:text-white">FAQ</Link></li>
