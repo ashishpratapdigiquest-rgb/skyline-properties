@@ -12,7 +12,7 @@
     "latitude": 26.7511,
     "longitude": 83.3703,
     "price": 18500000,
-    "priceDisplay": "₹1.85 Cr",
+    "priceDisplay": "\u20b91.85 Cr",
     "beds": 4,
     "baths": 4,
     "areaSqft": 2800,
@@ -22,8 +22,15 @@
     "verified": true,
     "createdAt": "2026-08-20",
     "views": 890,
-    "description": "Taramandal ke sabse premium tower mein ek shandar penthouse — khule terrace, modular kitchen, aur Gorakhpur shehar ka wide view. Metro city jaisi finishing, apne hi shehar mein.",
-    "amenities": ["Covered Parking", "Power Backup", "Lift", "24x7 Security", "Children's Park", "Club House"],
+    "description": "Taramandal ke sabse premium tower mein ek shandar penthouse \u2014 khule terrace, modular kitchen, aur Gorakhpur shehar ka wide view. Metro city jaisi finishing, apne hi shehar mein.",
+    "amenities": [
+      "Covered Parking",
+      "Power Backup",
+      "Lift",
+      "24x7 Security",
+      "Children's Park",
+      "Club House"
+    ],
     "images": [
       "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
@@ -43,7 +50,7 @@
     "latitude": 26.7735,
     "longitude": 83.3542,
     "price": 24000000,
-    "priceDisplay": "₹2.4 Cr",
+    "priceDisplay": "\u20b92.4 Cr",
     "beds": 5,
     "baths": 5,
     "areaSqft": 3800,
@@ -53,8 +60,14 @@
     "verified": true,
     "createdAt": "2026-07-15",
     "views": 1420,
-    "description": "Rapti Nagar ki shant colony mein banaya gaya ek independent villa — apna lawn, private parking aur 5 bade kamre. Family ke liye perfect, school aur hospital dono nazdeek.",
-    "amenities": ["Private Garden", "Covered Parking (3 cars)", "Servant Quarter", "Bore Well", "Power Backup"],
+    "description": "Rapti Nagar ki shant colony mein banaya gaya ek independent villa \u2014 apna lawn, private parking aur 5 bade kamre. Family ke liye perfect, school aur hospital dono nazdeek.",
+    "amenities": [
+      "Private Garden",
+      "Covered Parking (3 cars)",
+      "Servant Quarter",
+      "Bore Well",
+      "Power Backup"
+    ],
     "images": [
       "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=1200&q=80",
@@ -71,10 +84,10 @@
     "city": "Gorakhpur",
     "area": "Civil Lines",
     "address": "Executive Heights, Civil Lines, Gorakhpur, Uttar Pradesh 273001",
-    "latitude": 26.7580,
-    "longitude": 83.3670,
+    "latitude": 26.758,
+    "longitude": 83.367,
     "price": 9500000,
-    "priceDisplay": "₹95 Lakh",
+    "priceDisplay": "\u20b995 Lakh",
     "beds": 3,
     "baths": 3,
     "areaSqft": 1650,
@@ -84,8 +97,13 @@
     "verified": true,
     "createdAt": "2026-08-01",
     "views": 610,
-    "description": "Civil Lines mein, court aur main market se 5 minute ki doori par — ek well-maintained 3BHK flat, working professionals aur families dono ke liye ideal location.",
-    "amenities": ["Lift", "Power Backup", "Covered Parking", "24x7 Security"],
+    "description": "Civil Lines mein, court aur main market se 5 minute ki doori par \u2014 ek well-maintained 3BHK flat, working professionals aur families dono ke liye ideal location.",
+    "amenities": [
+      "Lift",
+      "Power Backup",
+      "Covered Parking",
+      "24x7 Security"
+    ],
     "images": [
       "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1200&q=80"
@@ -101,11 +119,11 @@
     "city": "Gorakhpur",
     "area": "Golghar",
     "address": "Golghar Main Market, Gorakhpur, Uttar Pradesh 273001",
-    "latitude": 26.7550,
-    "longitude": 83.3690,
+    "latitude": 26.755,
+    "longitude": 83.369,
     "price": 5400000,
-    "priceDisplay": "₹54 Lakh",
-    "rentDisplay": "₹45,000/mo",
+    "priceDisplay": "\u20b954 Lakh",
+    "rentDisplay": "\u20b945,000/mo",
     "beds": 0,
     "baths": 2,
     "areaSqft": 1200,
@@ -115,8 +133,13 @@
     "verified": true,
     "createdAt": "2026-08-25",
     "views": 240,
-    "description": "Golghar ke sabse busy commercial area mein office space — bank, showroom ya clinic ke liye best location, heavy foot-traffic ke saath.",
-    "amenities": ["Main Road Facing", "Parking", "Power Backup", "Attached Washroom"],
+    "description": "Golghar ke sabse busy commercial area mein office space \u2014 bank, showroom ya clinic ke liye best location, heavy foot-traffic ke saath.",
+    "amenities": [
+      "Main Road Facing",
+      "Parking",
+      "Power Backup",
+      "Attached Washroom"
+    ],
     "images": [
       "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1444723121867-7a241cacace9?auto=format&fit=crop&w=1200&q=80"
@@ -135,7 +158,7 @@
     "latitude": 26.7455,
     "longitude": 83.3785,
     "price": 7800000,
-    "priceDisplay": "₹78 Lakh",
+    "priceDisplay": "\u20b978 Lakh",
     "beds": 3,
     "baths": 2,
     "areaSqft": 1800,
@@ -145,8 +168,13 @@
     "verified": true,
     "createdAt": "2026-09-02",
     "views": 175,
-    "description": "Betiahata ke residential area mein double-storey ghar — schools, market aur hospital sab walking distance par. Family shift hone ke liye ready.",
-    "amenities": ["Terrace", "Covered Parking", "Bore Well", "Temple Room"],
+    "description": "Betiahata ke residential area mein double-storey ghar \u2014 schools, market aur hospital sab walking distance par. Family shift hone ke liye ready.",
+    "amenities": [
+      "Terrace",
+      "Covered Parking",
+      "Bore Well",
+      "Temple Room"
+    ],
     "images": [
       "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1600585154363-67eb9e2e2099?auto=format&fit=crop&w=1200&q=80"
@@ -162,10 +190,10 @@
     "city": "Gorakhpur",
     "area": "Mohaddipur",
     "address": "Near Rapti River, Mohaddipur, Gorakhpur, Uttar Pradesh 273010",
-    "latitude": 26.7690,
-    "longitude": 83.3610,
+    "latitude": 26.769,
+    "longitude": 83.361,
     "price": 3200000,
-    "priceDisplay": "₹32 Lakh",
+    "priceDisplay": "\u20b932 Lakh",
     "beds": 0,
     "baths": 0,
     "areaSqft": 2400,
@@ -175,8 +203,12 @@
     "verified": false,
     "createdAt": "2026-07-28",
     "views": 130,
-    "description": "Mohaddipur mein Rapti River ke paas ek clear-title residential plot — ghar banane ya investment, dono ke liye badhiya option.",
-    "amenities": ["Clear Title", "Boundary Wall", "Road Facing"],
+    "description": "Mohaddipur mein Rapti River ke paas ek clear-title residential plot \u2014 ghar banane ya investment, dono ke liye badhiya option.",
+    "amenities": [
+      "Clear Title",
+      "Boundary Wall",
+      "Road Facing"
+    ],
     "images": [
       "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80"
     ]
@@ -194,8 +226,8 @@
     "latitude": 26.7495,
     "longitude": 83.3745,
     "price": 2200000,
-    "priceDisplay": "₹22 Lakh",
-    "rentDisplay": "₹18,000/mo",
+    "priceDisplay": "\u20b922 Lakh",
+    "rentDisplay": "\u20b918,000/mo",
     "beds": 2,
     "baths": 2,
     "areaSqft": 1100,
@@ -205,8 +237,12 @@
     "verified": true,
     "createdAt": "2026-09-05",
     "views": 98,
-    "description": "Paadri Bazar mein rehne ke liye ek saaf-suthra 2BHK flat, college aur main bazar dono nazdeek — students aur chhote families ke liye upyukt.",
-    "amenities": ["Lift", "Covered Parking", "Water Supply 24x7"],
+    "description": "Paadri Bazar mein rehne ke liye ek saaf-suthra 2BHK flat, college aur main bazar dono nazdeek \u2014 students aur chhote families ke liye upyukt.",
+    "amenities": [
+      "Lift",
+      "Covered Parking",
+      "Water Supply 24x7"
+    ],
     "images": [
       "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1519452575417-564c1401ecc0?auto=format&fit=crop&w=1200&q=80"
@@ -222,10 +258,10 @@
     "city": "Gorakhpur",
     "area": "Shahpur",
     "address": "Shahpur, Gorakhpur, Uttar Pradesh 273006",
-    "latitude": 26.7350,
+    "latitude": 26.735,
     "longitude": 83.3805,
     "price": 12000000,
-    "priceDisplay": "₹1.2 Cr",
+    "priceDisplay": "\u20b91.2 Cr",
     "beds": 4,
     "baths": 4,
     "areaSqft": 3200,
@@ -235,8 +271,13 @@
     "verified": true,
     "createdAt": "2026-06-30",
     "views": 540,
-    "description": "Shahpur ke ek purane, hare-bhare mohalle mein bada bungalow — wide rooms, khula aangan aur purani-style ki mazbooti, aaj ki zaroorton ke saath.",
-    "amenities": ["Large Courtyard", "Covered Parking (2 cars)", "Servant Quarter", "Bore Well"],
+    "description": "Shahpur ke ek purane, hare-bhare mohalle mein bada bungalow \u2014 wide rooms, khula aangan aur purani-style ki mazbooti, aaj ki zaroorton ke saath.",
+    "amenities": [
+      "Large Courtyard",
+      "Covered Parking (2 cars)",
+      "Servant Quarter",
+      "Bore Well"
+    ],
     "images": [
       "https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&w=1200&q=80"

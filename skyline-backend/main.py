@@ -9,11 +9,50 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional
 import json
 import os
+import requests
 from datetime import datetime
 
 app = FastAPI(title="Skyline Properties API", version="1.0.0")
 
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "changeme")
+
+# ---------- Email (Brevo — free tier, 300 emails/day forever) ----------
+BREVO_API_KEY = os.environ.get("BREVO_API_KEY")  # set this in Render env vars
+BREVO_FROM_EMAIL = os.environ.get("BREVO_FROM_EMAIL", "no-reply@example.com")
+BREVO_FROM_NAME = os.environ.get("BREVO_FROM_NAME", "Skyline Properties")
+ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL")  # where new-lead notifications go
+SITE_URL = os.environ.get("SITE_URL", "https://skyline-properties-iota.vercel.app")
+
+
+def send_email(to_email: str, subject: str, html_content: str):
+    """
+    Sends an email via Brevo's REST API. Silently no-ops (logs only) if
+    BREVO_API_KEY isn't configured yet, so the rest of the app keeps working
+    even before email is set up.
+    """
+    if not BREVO_API_KEY or not to_email:
+        print(f"[email skipped — no BREVO_API_KEY or recipient] to={to_email} subject={subject}")
+        return False
+    try:
+        resp = requests.post(
+            "https://api.brevo.com/v3/smtp/email",
+            headers={
+                "api-key": BREVO_API_KEY,
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            json={
+                "sender": {"name": BREVO_FROM_NAME, "email": BREVO_FROM_EMAIL},
+                "to": [{"email": to_email}],
+                "subject": subject,
+                "htmlContent": html_content,
+            },
+            timeout=10,
+        )
+        return resp.status_code in (200, 201)
+    except Exception as e:
+        print(f"[email failed] {e}")
+        return False
 
 
 def require_admin(x_admin_key: Optional[str] = Header(default=None)):
@@ -66,6 +105,7 @@ class NewsletterSignup(BaseModel):
 class PropertyAlert(BaseModel):
     name: str
     phone: str
+    email: EmailStr
     purpose: Optional[str] = None
     city: Optional[str] = "Gorakhpur"
     area: Optional[str] = None
@@ -294,11 +334,51 @@ def create_property(payload: PropertyIn, x_admin_key: Optional[str] = Header(def
     record["createdAt"] = datetime.utcnow().strftime("%Y-%m-%d")
     record["views"] = 0
     if not record.get("priceDisplay"):
-        record["priceDisplay"] = f"${record['price']:,.0f}"
+        record["priceDisplay"] = f"₹{record['price']:,.0f}"
 
     properties.append(record)
     save_json("properties.json", properties)
+    notify_matching_alerts(record)
     return record
+
+
+def notify_matching_alerts(property_record: dict):
+    """
+    Checks saved property alerts against a newly created listing and emails
+    anyone whose saved criteria (purpose/area/type/budget) match. Runs
+    best-effort — a slow/failed email never blocks property creation.
+    """
+    if not os.path.exists(ALERTS_LOG):
+        return
+    try:
+        with open(ALERTS_LOG, "r", encoding="utf-8") as f:
+            alerts = json.load(f)
+    except (json.JSONDecodeError, FileNotFoundError):
+        return
+
+    for alert in alerts:
+        if alert.get("purpose") and alert["purpose"] != property_record.get("purpose"):
+            continue
+        if alert.get("area") and alert["area"].lower() != (property_record.get("area") or "").lower():
+            continue
+        if alert.get("property_type") and alert["property_type"] != property_record.get("propertyType"):
+            continue
+        if alert.get("max_budget") and property_record.get("price", 0) > alert["max_budget"]:
+            continue
+
+        property_url = f"{SITE_URL}/properties/{property_record.get('slug')}"
+        send_email(
+            alert.get("email"),
+            f"Naya Matching Property: {property_record.get('title')}",
+            f"""
+            <p>Namaste {alert.get('name', '')},</p>
+            <p>Aapke saved alert se match karti hui ek nayi property list hui hai:</p>
+            <h3>{property_record.get('title')}</h3>
+            <p>{property_record.get('area', '')}, {property_record.get('city', '')} — {property_record.get('priceDisplay', '')}</p>
+            <p><a href="{property_url}">Poori details yahan dekhein →</a></p>
+            <p>— Skyline Properties, Gorakhpur</p>
+            """,
+        )
 
 
 @app.put("/api/properties/{slug_or_id}")
@@ -393,4 +473,42 @@ def create_property_alert(payload: PropertyAlert):
     entries.append(entry)
     with open(ALERTS_LOG, "w", encoding="utf-8") as f:
         json.dump(entries, f, indent=2)
-    return {"success": True, "message": "Alert saved! Hum matching property milte hi aapko contact karenge."}
+
+    # Confirmation email to the buyer (best-effort — doesn't block the response)
+    send_email(
+        payload.email,
+        "Aapka Property Alert Set Ho Gaya — Skyline Properties",
+        f"""
+        <p>Namaste {payload.name},</p>
+        <p>Aapka property alert successfully save ho gaya hai:</p>
+        <ul>
+          <li><b>Purpose:</b> {payload.purpose or 'Any'}</li>
+          <li><b>Area:</b> {payload.area or 'Koi bhi'}</li>
+          <li><b>Property Type:</b> {payload.property_type or 'Koi bhi'}</li>
+          <li><b>Max Budget:</b> {f"₹{payload.max_budget:,.0f}" if payload.max_budget else 'Not specified'}</li>
+        </ul>
+        <p>Jaise hi koi matching property list hoti hai, aapko turant email milegi.</p>
+        <p>— Skyline Properties, Gorakhpur</p>
+        """,
+    )
+
+    # Notify admin/owner of the new lead
+    if ADMIN_EMAIL:
+        send_email(
+            ADMIN_EMAIL,
+            f"Naya Property Alert Lead: {payload.name}",
+            f"""
+            <p>Naya lead aaya hai:</p>
+            <ul>
+              <li><b>Name:</b> {payload.name}</li>
+              <li><b>Phone:</b> {payload.phone}</li>
+              <li><b>Email:</b> {payload.email}</li>
+              <li><b>Purpose:</b> {payload.purpose or 'Any'}</li>
+              <li><b>Area:</b> {payload.area or 'Any'}</li>
+              <li><b>Type:</b> {payload.property_type or 'Any'}</li>
+              <li><b>Budget:</b> {f"₹{payload.max_budget:,.0f}" if payload.max_budget else 'Not specified'}</li>
+            </ul>
+            """,
+        )
+
+    return {"success": True, "message": "Alert saved! Hum matching property milte hi aapko email karenge."}

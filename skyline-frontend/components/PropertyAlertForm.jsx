@@ -3,7 +3,7 @@ import { useState } from "react";
 import { createPropertyAlert } from "@/lib/propertyApi";
 
 export default function PropertyAlertForm({ areas = [], propertyTypes = [] }) {
-  const [form, setForm] = useState({ name: "", phone: "", purpose: "sale", area: "", property_type: "", max_budget: "" });
+  const [form, setForm] = useState({ name: "", phone: "", email: "", purpose: "sale", area: "", property_type: "", max_budget: "" });
   const [note, setNote] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -19,7 +19,7 @@ export default function PropertyAlertForm({ areas = [], propertyTypes = [] }) {
     setNote(res.message);
     setLoading(false);
     if (res.success !== false) {
-      setForm({ name: "", phone: "", purpose: "sale", area: "", property_type: "", max_budget: "" });
+      setForm({ name: "", phone: "", email: "", purpose: "sale", area: "", property_type: "", max_budget: "" });
     }
   }
 
@@ -36,6 +36,12 @@ export default function PropertyAlertForm({ areas = [], propertyTypes = [] }) {
           <input required value={form.phone} onChange={(e) => update("phone", e.target.value)} type="tel" placeholder="+91 98765 43210"
             className="w-full px-3.5 py-3 border border-slate-200 rounded-lg text-sm outline-none focus:border-brand" />
         </div>
+      </div>
+      <div className="mb-4">
+        <label className="block text-[13px] font-semibold text-navy mb-1.5">Email Address</label>
+        <input required value={form.email} onChange={(e) => update("email", e.target.value)} type="email" placeholder="ramesh@email.com"
+          className="w-full px-3.5 py-3 border border-slate-200 rounded-lg text-sm outline-none focus:border-brand" />
+        <p className="text-[11.5px] text-slate-400 mt-1">Matching property milte hi isi email par alert bhejenge.</p>
       </div>
       <div className="grid sm:grid-cols-2 gap-4 mb-4">
         <div>
