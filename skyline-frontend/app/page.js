@@ -3,17 +3,41 @@ import Link from "next/link";
 import PropertyCard from "@/components/Property/PropertyCard";
 import AgentCard from "@/components/AgentCard";
 import { getAgents, getTestimonials } from "@/lib/api";
-import { getFeaturedProperties } from "@/lib/propertyApi";
+import { getFeaturedProperties, getPropertyTypes } from "@/lib/propertyApi";
+import { getBlogPosts } from "@/lib/blogApi";
+import { getSettings } from "@/lib/settingsApi";
 import NewsletterForm from "@/components/NewsletterForm";
 
+const CATEGORY_ICONS = {
+  Apartment: "🏢",
+  Villa: "🏡",
+  House: "🏠",
+  Land: "🌳",
+  Office: "🏬",
+  Penthouse: "🏙️",
+  Loft: "🛋️",
+};
+
+const CATEGORY_BLURB = {
+  Apartment: "Ready-to-move flats across Gorakhpur",
+  Villa: "Independent homes with private space",
+  House: "Family homes in established colonies",
+  Land: "Plots for building or investment",
+  Office: "Commercial space for your business",
+};
+
 export default async function HomePage() {
-  const [featured, agents, testimonials] = await Promise.all([
+  const [featured, agents, testimonials, propertyTypes, blogPosts, settings] = await Promise.all([
     getFeaturedProperties(3),
     getAgents(),
     getTestimonials(),
+    getPropertyTypes(),
+    getBlogPosts(),
+    getSettings(),
   ]);
 
   const topAgents = agents.slice(0, 4);
+  const latestPosts = blogPosts.slice(0, 3);
 
   const locations = [
     { name: "Taramandal", image: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=400&q=80" },
@@ -118,6 +142,32 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Property Categories */}
+      <section className="pb-16">
+        <div className="max-w-[1180px] mx-auto px-6">
+          <div className="text-center max-w-xl mx-auto mb-11">
+            <div className="section-eyebrow"><span className="text-brand font-semibold text-sm">Browse By Category</span></div>
+            <h2 className="font-display text-[26px] font-bold text-navy mt-1">Jo Chahiye, Wahi Dhundo</h2>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-5">
+            {propertyTypes.map((type) => (
+              <Link
+                key={type}
+                href={`/properties?property_type=${encodeURIComponent(type)}`}
+                className="group bg-white border border-slate-200 rounded-2xl p-6 text-center hover:border-brand hover:shadow-elevated transition-all"
+              >
+                <div className="w-14 h-14 rounded-2xl bg-brand-tint mx-auto mb-4 flex items-center justify-center text-2xl group-hover:bg-brand group-hover:scale-110 transition-all">
+                  <span className="group-hover:hidden">{CATEGORY_ICONS[type] || "🏘️"}</span>
+                  <span className="hidden group-hover:inline filter brightness-0 invert">{CATEGORY_ICONS[type] || "🏘️"}</span>
+                </div>
+                <h3 className="font-display font-semibold text-navy text-[15px] mb-1">{type}</h3>
+                <p className="text-slate-500 text-[12px] leading-snug">{CATEGORY_BLURB[type] || `${type} listings in Gorakhpur`}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Prime Locations */}
       <section className="pb-16">
         <div className="max-w-[1180px] mx-auto px-6">
@@ -145,6 +195,49 @@ export default async function HomePage() {
           <Link href="/properties" className="btn bg-white text-brand border border-white hover:bg-brand-tint">Discover Deals →</Link>
         </div>
       </div>
+
+      {/* Why Choose Us */}
+      <section className="py-16">
+        <div className="max-w-[1180px] mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+          <div className="relative h-[340px] rounded-2xl overflow-hidden shadow-elevated order-2 lg:order-1">
+            <Image src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=900&q=80" alt="Skyline Properties team at work" fill className="object-cover" />
+            <div className="absolute bottom-5 left-5 right-5 bg-white/95 backdrop-blur rounded-xl p-4 flex items-center gap-4">
+              <div>
+                <b className="block text-2xl font-display text-brand">15+</b>
+                <span className="text-[11.5px] text-slate-500">Years in Gorakhpur</span>
+              </div>
+              <div className="w-px h-9 bg-slate-200" />
+              <div>
+                <b className="block text-2xl font-display text-brand">4,500+</b>
+                <span className="text-[11.5px] text-slate-500">Happy Families</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="order-1 lg:order-2">
+            <span className="text-brand font-semibold text-sm">Kyun Skyline Properties</span>
+            <h2 className="font-display text-[28px] font-bold text-navy mt-1 mb-5">Local Expertise, Zero Hidden Fees</h2>
+            <ul className="space-y-4">
+              {[
+                { title: "RERA Verified Listings", desc: "Har property ka title aur documents pehle se check kiye jaate hain." },
+                { title: "Zero Brokerage Surprises", desc: "Jo fees pehle bataye jaate hain, wahi final hote hain — koi hidden charge nahi." },
+                { title: "Gorakhpur Ke Har Area Ki Jaankari", desc: "Taramandal se Shahpur tak, humein har mohalle ki baareek details pata hain." },
+                { title: "Fast Documentation Support", desc: "Registry, stamp duty, home loan — sab process mein saath dete hain." },
+              ].map((item) => (
+                <li key={item.title} className="flex gap-3.5">
+                  <div className="w-8 h-8 rounded-full bg-brand-tint text-brand flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-navy text-[15px]">{item.title}</h4>
+                    <p className="text-slate-500 text-[13.5px] mt-0.5">{item.desc}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
 
       {/* Steps */}
       <section className="py-16">
@@ -201,6 +294,34 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Latest from the Blog */}
+      {latestPosts.length > 0 && (
+        <section className="py-16 bg-slate-50">
+          <div className="max-w-[1180px] mx-auto px-6">
+            <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
+              <div>
+                <span className="text-brand font-semibold text-sm">Skyline Insights</span>
+                <h2 className="font-display text-[26px] font-bold text-navy mt-1">Latest Guides &amp; Market Updates</h2>
+              </div>
+              <Link href="/blog" className="text-brand font-semibold text-sm hover:underline">Sab Posts Dekhein →</Link>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              {latestPosts.map((post) => (
+                <Link key={post.id} href={`/blog/${post.slug}`} className="group bg-white border border-slate-200 rounded-[10px] overflow-hidden shadow-card hover:shadow-elevated transition-shadow">
+                  <div className="relative h-[160px]">
+                    <Image src={post.image} alt={post.title} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
+                  </div>
+                  <div className="p-5">
+                    <div className="text-brand text-xs font-bold tracking-wide mb-2 uppercase">{post.date}</div>
+                    <h3 className="font-display text-[15.5px] font-semibold text-navy leading-snug">{post.title}</h3>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Newsletter */}
       <section className="py-11 bg-gradient-to-br from-navy to-[#163663] text-white">
         <div className="max-w-[1180px] mx-auto px-6 flex flex-wrap items-center justify-between gap-7">
@@ -213,7 +334,7 @@ export default async function HomePage() {
             <div className="icon-badge bg-white/10">📞</div>
             <div>
               <span className="block text-[12.5px] text-[#c7d4e8]">Call Us Anytime</span>
-              <b className="text-[17px]">+91 98765 43210</b>
+              <b className="text-[17px]">{settings.phone_number}</b>
             </div>
           </div>
         </div>
