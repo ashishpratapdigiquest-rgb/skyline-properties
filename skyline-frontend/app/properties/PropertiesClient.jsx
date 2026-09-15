@@ -1,10 +1,16 @@
 "use client";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import dynamic from "next/dynamic";
 import PropertyCard from "@/components/Property/PropertyCard";
 import PropertyFilters from "@/components/Property/PropertyFilters";
 import PropertySkeleton from "@/components/Common/PropertySkeleton";
 import { getProperties, getPropertyTypes, getPropertyLocations } from "@/lib/propertyApi";
+
+const PropertyMap = dynamic(() => import("@/components/Property/PropertyMap"), {
+  ssr: false,
+  loading: () => <div className="h-[500px] bg-slate-100 rounded-2xl animate-pulse" />,
+});
 
 const SORT_OPTIONS = [
   { value: "latest", label: "Latest" },
@@ -41,6 +47,7 @@ export default function PropertiesClient() {
   const [propertyTypes, setPropertyTypes] = useState([]);
   const [locations, setLocations] = useState([]);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [view, setView] = useState("grid");
 
   const debounceRef = useRef(null);
 
@@ -68,7 +75,7 @@ export default function PropertiesClient() {
     setLoading(true);
     setError(null);
 
-    getProperties({ ...filters, sort, page, limit: 9 })
+    getProperties({ ...filters, sort, page: view === "map" ? 1 : page, limit: view === "map" ? 50 : 9 })
       .then((data) => {
         if (cancelled) return;
         if (!data || !Array.isArray(data.items)) {
@@ -86,7 +93,7 @@ export default function PropertiesClient() {
       });
 
     return () => { cancelled = true; };
-  }, [filters, sort, page]);
+  }, [filters, sort, page, view]);
 
   function handleFiltersChange(next) {
     setFilters(next);
@@ -172,6 +179,22 @@ export default function PropertiesClient() {
               <option key={opt.value} value={opt.value}>Sort: {opt.label}</option>
             ))}
           </select>
+          <div className="flex border border-slate-200 rounded-lg overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setView("grid")}
+              className={`px-4 py-3 text-sm font-medium ${view === "grid" ? "bg-brand text-white" : "bg-white text-slate-600"}`}
+            >
+              ▦ Grid
+            </button>
+            <button
+              type="button"
+              onClick={() => setView("map")}
+              className={`px-4 py-3 text-sm font-medium ${view === "map" ? "bg-brand text-white" : "bg-white text-slate-600"}`}
+            >
+              📍 Map
+            </button>
+          </div>
         </div>
 
         {/* Result count */}
@@ -182,7 +205,7 @@ export default function PropertiesClient() {
         )}
 
         {/* Loading */}
-        {loading && <PropertySkeleton count={6} />}
+        {loading && (view === "map" ? <div className="h-[500px] bg-slate-100 rounded-2xl animate-pulse" /> : <PropertySkeleton count={6} />)}
 
         {/* Error */}
         {!loading && error && (
@@ -201,8 +224,13 @@ export default function PropertiesClient() {
           </div>
         )}
 
-        {/* Results */}
-        {!loading && !error && result.items.length > 0 && (
+        {/* Map view */}
+        {!loading && !error && result.items.length > 0 && view === "map" && (
+          <PropertyMap properties={result.items} />
+        )}
+
+        {/* Grid view */}
+        {!loading && !error && result.items.length > 0 && view === "grid" && (
           <>
             <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
               {result.items.map((p) => <PropertyCard key={p.id} property={p} />)}
