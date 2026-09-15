@@ -46,6 +46,7 @@ export default function Footer({ settings }) {
               <li><Link href="/about" className="hover:text-white">About Us</Link></li>
               <li><Link href="/blog" className="hover:text-white">Blog</Link></li>
               <li><Link href="/emi-calculator" className="hover:text-white">EMI Calculator</Link></li>
+              <li><Link href="/compare" className="hover:text-white">Compare Properties</Link></li>
             </ul>
           </div>
 

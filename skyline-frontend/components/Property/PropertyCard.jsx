@@ -1,6 +1,7 @@
 import Link from "next/link";
 import SmartImage from "@/components/Common/SmartImage";
 import { getImageUrl } from "@/lib/imageUrl";
+import CompareToggle from "./CompareToggle";
 
 const TAG_STYLES = {
   FEATURED: "bg-navy",
@@ -32,16 +33,19 @@ export default function PropertyCard({ property }) {
           className="object-cover group-hover:scale-[1.03] transition-transform duration-300"
           sizes="(max-width: 768px) 100vw, 33vw"
         />
-        {property.tag && (
-          <span className={`absolute top-3 left-3 px-3 py-1 rounded-full text-[11px] font-bold text-white ${TAG_STYLES[property.tag] || "bg-navy"}`}>
-            {property.tag === "LUXURY" ? "♛ LUXURY" : property.tag}
-          </span>
-        )}
-        {property.verified && (
-          <span className="absolute top-3 right-3 px-2.5 py-1 rounded-full text-[10px] font-bold text-white bg-brand">
-            ✓ Verified
-          </span>
-        )}
+        <div className="absolute top-3 left-3 flex flex-col gap-1.5 items-start">
+          {property.tag && (
+            <span className={`px-3 py-1 rounded-full text-[11px] font-bold text-white ${TAG_STYLES[property.tag] || "bg-navy"}`}>
+              {property.tag === "LUXURY" ? "♛ LUXURY" : property.tag}
+            </span>
+          )}
+          {property.verified && (
+            <span className="px-2.5 py-1 rounded-full text-[10px] font-bold text-white bg-brand">
+              ✓ Verified
+            </span>
+          )}
+        </div>
+        <CompareToggle slug={property.slug} title={property.title} />
         {priceLabel && (
           <span className="absolute bottom-3 left-3 bg-navy/85 text-white px-3 py-1 rounded-lg font-bold text-sm">
             {priceLabel}

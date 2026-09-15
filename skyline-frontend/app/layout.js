@@ -2,6 +2,8 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { CompareProvider } from "@/components/Property/CompareProvider";
+import CompareBar from "@/components/Property/CompareBar";
 import { getSettings } from "@/lib/settingsApi";
 
 export const dynamic = "force-dynamic";
@@ -53,7 +55,10 @@ export default async function RootLayout({ children }) {
         {/* eslint-disable-next-line react/no-danger */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }} />
         <Header settings={settings} />
-        {children}
+        <CompareProvider>
+          {children}
+          <CompareBar />
+        </CompareProvider>
         <Footer settings={settings} />
         <WhatsAppButton whatsappNumber={settings.whatsapp_number} />
       </body>
