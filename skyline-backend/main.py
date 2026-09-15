@@ -11,6 +11,7 @@ import json
 import os
 import requests
 from datetime import datetime
+from database import load_json, save_json
 
 app = FastAPI(title="Skyline Properties API", version="1.0.0")
 
@@ -70,17 +71,6 @@ app.add_middleware(
 )
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
-CONTACT_LOG = os.path.join(DATA_DIR, "contact_submissions.json")
-
-
-def load_json(filename):
-    with open(os.path.join(DATA_DIR, filename), "r", encoding="utf-8") as f:
-        return json.load(f)
-
-
-def save_json(filename, data):
-    with open(os.path.join(DATA_DIR, filename), "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2)
 
 
 def slugify(text):
@@ -447,12 +437,8 @@ def notify_matching_alerts(property_record: dict):
     anyone whose saved criteria (purpose/area/type/budget) match. Runs
     best-effort — a slow/failed email never blocks property creation.
     """
-    if not os.path.exists(ALERTS_LOG):
-        return
-    try:
-        with open(ALERTS_LOG, "r", encoding="utf-8") as f:
-            alerts = json.load(f)
-    except (json.JSONDecodeError, FileNotFoundError):
+    alerts = load_json("property_alerts.json")
+    if not alerts:
         return
 
     for alert in alerts:
@@ -693,19 +679,11 @@ def delete_testimonial(testimonial_id: int, x_admin_key: Optional[str] = Header(
 
 @app.post("/api/contact")
 def submit_contact(payload: ContactMessage):
-    os.makedirs(DATA_DIR, exist_ok=True)
-    entries = []
-    if os.path.exists(CONTACT_LOG):
-        with open(CONTACT_LOG, "r", encoding="utf-8") as f:
-            try:
-                entries = json.load(f)
-            except json.JSONDecodeError:
-                entries = []
+    entries = load_json("contact_submissions.json")
     entry = payload.dict()
     entry["received_at"] = datetime.utcnow().isoformat()
     entries.append(entry)
-    with open(CONTACT_LOG, "w", encoding="utf-8") as f:
-        json.dump(entries, f, indent=2)
+    save_json("contact_submissions.json", entries)
     return {"success": True, "message": "Thanks! A Skyline agent will reach out shortly."}
 
 
@@ -715,31 +693,20 @@ def subscribe_newsletter(payload: NewsletterSignup):
     return {"success": True, "message": f"Subscribed {payload.email} successfully."}
 
 
-ALERTS_LOG = os.path.join(DATA_DIR, "property_alerts.json")
-
-
 @app.post("/api/property-alerts")
 def create_property_alert(payload: PropertyAlert):
     """
     Captures a buyer's search criteria so the team can follow up when a
-    matching property is listed. NOTE: this only stores the request — it
-    does not (yet) send automated WhatsApp/email/SMS notifications. Wiring
-    that up needs a messaging provider (e.g. Twilio, WhatsApp Business API)
-    and a scheduled job that matches new listings against saved alerts.
+    matching property is listed. NOTE: matching-property emails go out
+    automatically (see notify_matching_alerts below) once Brevo is
+    configured — but there's no scheduled re-check job, so alerts only
+    fire at the moment a new property is created via the admin panel.
     """
-    os.makedirs(DATA_DIR, exist_ok=True)
-    entries = []
-    if os.path.exists(ALERTS_LOG):
-        with open(ALERTS_LOG, "r", encoding="utf-8") as f:
-            try:
-                entries = json.load(f)
-            except json.JSONDecodeError:
-                entries = []
+    entries = load_json("property_alerts.json")
     entry = payload.dict()
     entry["created_at"] = datetime.utcnow().isoformat()
     entries.append(entry)
-    with open(ALERTS_LOG, "w", encoding="utf-8") as f:
-        json.dump(entries, f, indent=2)
+    save_json("property_alerts.json", entries)
 
     # Confirmation email to the buyer (best-effort — doesn't block the response)
     send_email(
