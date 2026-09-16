@@ -2,6 +2,7 @@ import Link from "next/link";
 import SmartImage from "@/components/Common/SmartImage";
 import { getImageUrl } from "@/lib/imageUrl";
 import CompareToggle from "./CompareToggle";
+import FavoriteButton from "./FavoriteButton";
 
 const TAG_STYLES = {
   FEATURED: "bg-navy",
@@ -45,7 +46,10 @@ export default function PropertyCard({ property }) {
             </span>
           )}
         </div>
-        <CompareToggle slug={property.slug} title={property.title} />
+        <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end">
+          <CompareToggle slug={property.slug} title={property.title} />
+          <FavoriteButton slug={property.slug} className="!w-8 !h-8 !text-base bg-white/90" />
+        </div>
         {priceLabel && (
           <span className="absolute bottom-3 left-3 bg-navy/85 text-white px-3 py-1 rounded-lg font-bold text-sm">
             {priceLabel}

@@ -112,7 +112,7 @@ export default async function PropertyDetailsPage({ params }) {
                 <p className="text-slate-500 mt-1.5">📍 {property.address || `${property.area}, ${property.city}`}</p>
               </div>
               <div className="flex items-center gap-2">
-                <FavoriteButton />
+                <FavoriteButton slug={property.slug} />
                 <ShareButtons title={property.title} url={pageUrl} />
               </div>
             </div>

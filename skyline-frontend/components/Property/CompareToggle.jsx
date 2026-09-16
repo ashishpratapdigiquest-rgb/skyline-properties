@@ -19,7 +19,7 @@ export default function CompareToggle({ slug, title }) {
       onClick={handleClick}
       disabled={disabled}
       title={disabled ? `Max ${maxCompare} properties compare kar sakte ho` : checked ? "Compare list se hatao" : "Compare ke liye add karo"}
-      className={`absolute top-3 right-3 z-10 flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-[11px] font-semibold transition-colors ${
+      className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-[11px] font-semibold transition-colors ${
         checked ? "bg-brand text-white" : "bg-white/90 text-navy hover:bg-white"
       } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
     >

@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/components/Auth/AuthProvider";
 
 const NAV_ITEMS = [
   { href: "/", label: "Home" },
@@ -16,6 +17,7 @@ const NAV_ITEMS = [
 export default function Header({ settings }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const { user } = useAuth();
 
   const siteName = settings?.site_name || "Skyline Properties";
   const [logoTop, ...rest] = siteName.split(" ");
@@ -65,8 +67,20 @@ export default function Header({ settings }) {
                 </Link>
               </li>
             ))}
+            <li className="md:hidden">
+              <Link href={user ? "/favorites" : "/login"} className="nav-link">
+                {user ? "♥ My Favorites" : "Login / Sign Up"}
+              </Link>
+            </li>
           </ul>
         </nav>
+
+        <Link
+          href={user ? "/favorites" : "/login"}
+          className="hidden md:flex items-center gap-1.5 text-sm font-semibold text-navy hover:text-brand"
+        >
+          {user ? <>♥ Favorites</> : <>Login</>}
+        </Link>
 
         <a
           href={phoneHref}

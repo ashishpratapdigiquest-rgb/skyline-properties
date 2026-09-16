@@ -4,3 +4,5 @@ __pycache__
 .env
 data/contact_submissions.json
 data/property_alerts.json
+data/users.json
+data/favorites.json

@@ -3,15 +3,36 @@ Skyline Properties — FastAPI backend
 Serves properties, agents, blog posts, and accepts contact form submissions.
 Run locally:  uvicorn main:app --reload --port 8000
 """
-from fastapi import FastAPI, HTTPException, Header
+from fastapi import FastAPI, HTTPException, Header, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 import json
 import os
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 from database import load_json, save_json
+import jwt
+from passlib.context import CryptContext
+
+JWT_SECRET = os.environ.get("JWT_SECRET", "dev-secret-change-in-production")
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+def create_token(user_id: int, email: str) -> str:
+    payload = {"user_id": user_id, "email": email, "exp": datetime.utcnow() + timedelta(days=30)}
+    return jwt.encode(payload, JWT_SECRET, algorithm="HS256")
+
+
+def get_current_user(authorization: Optional[str] = Header(default=None)):
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    token = authorization.split(" ", 1)[1]
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    return payload
 
 app = FastAPI(title="Skyline Properties API", version="1.0.0")
 
@@ -162,6 +183,17 @@ class SiteSettingsUpdate(BaseModel):
     whatsapp_number: Optional[str] = None
     email: Optional[str] = None
     address: Optional[str] = None
+
+
+class UserRegister(BaseModel):
+    name: str
+    email: EmailStr
+    password: str
+
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
 
 
 class PropertyIn(BaseModel):
@@ -616,6 +648,78 @@ def delete_comment(comment_id: int, x_admin_key: Optional[str] = Header(default=
     if len(filtered) == len(comments):
         raise HTTPException(status_code=404, detail="Comment not found")
     save_json("comments.json", filtered)
+    return {"success": True}
+
+
+# ---------- Auth ----------
+@app.post("/api/auth/register")
+def register(payload: UserRegister):
+    users = load_json("users.json")
+    if any(u["email"].lower() == payload.email.lower() for u in users):
+        raise HTTPException(status_code=400, detail="Is email se pehle se ek account bana hua hai")
+
+    new_id = max([u["id"] for u in users], default=0) + 1
+    user = {
+        "id": new_id,
+        "name": payload.name,
+        "email": payload.email,
+        "password_hash": pwd_context.hash(payload.password),
+        "created_at": datetime.utcnow().isoformat(),
+    }
+    users.append(user)
+    save_json("users.json", users)
+
+    token = create_token(new_id, payload.email)
+    return {"token": token, "user": {"id": new_id, "name": payload.name, "email": payload.email}}
+
+
+@app.post("/api/auth/login")
+def login(payload: UserLogin):
+    users = load_json("users.json")
+    user = next((u for u in users if u["email"].lower() == payload.email.lower()), None)
+    if not user or not pwd_context.verify(payload.password, user["password_hash"]):
+        raise HTTPException(status_code=401, detail="Email ya password galat hai")
+
+    token = create_token(user["id"], user["email"])
+    return {"token": token, "user": {"id": user["id"], "name": user["name"], "email": user["email"]}}
+
+
+@app.get("/api/auth/me")
+def get_me(current=Depends(get_current_user)):
+    users = load_json("users.json")
+    user = next((u for u in users if u["id"] == current["user_id"]), None)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return {"id": user["id"], "name": user["name"], "email": user["email"]}
+
+
+# ---------- Favorites (requires login) ----------
+@app.get("/api/favorites")
+def get_favorites(current=Depends(get_current_user)):
+    favorites = load_json("favorites.json")
+    my_slugs = {f["slug"] for f in favorites if f["user_id"] == current["user_id"]}
+    properties = load_json("properties.json")
+    return [p for p in properties if p["slug"] in my_slugs]
+
+
+@app.post("/api/favorites/{slug}")
+def add_favorite(slug: str, current=Depends(get_current_user)):
+    properties = load_json("properties.json")
+    if not any(p["slug"] == slug for p in properties):
+        raise HTTPException(status_code=404, detail="Property not found")
+
+    favorites = load_json("favorites.json")
+    if not any(f["user_id"] == current["user_id"] and f["slug"] == slug for f in favorites):
+        favorites.append({"user_id": current["user_id"], "slug": slug, "created_at": datetime.utcnow().isoformat()})
+        save_json("favorites.json", favorites)
+    return {"success": True}
+
+
+@app.delete("/api/favorites/{slug}")
+def remove_favorite(slug: str, current=Depends(get_current_user)):
+    favorites = load_json("favorites.json")
+    favorites = [f for f in favorites if not (f["user_id"] == current["user_id"] and f["slug"] == slug)]
+    save_json("favorites.json", favorites)
     return {"success": True}
 
 
