@@ -48,6 +48,28 @@ export async function getMe(token) {
   }
 }
 
+export async function forgotPassword(email) {
+  const res = await fetch(`${API_URL}/api/auth/forgot-password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.detail || "Request failed");
+  return data;
+}
+
+export async function resetPassword(token, newPassword) {
+  const res = await fetch(`${API_URL}/api/auth/reset-password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token, new_password: newPassword }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.detail || "Reset failed");
+  return data;
+}
+
 export async function getFavorites(token) {
   try {
     const res = await fetch(`${API_URL}/api/favorites`, {

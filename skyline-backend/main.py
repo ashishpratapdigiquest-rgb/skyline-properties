@@ -196,6 +196,15 @@ class UserLogin(BaseModel):
     password: str
 
 
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
+
+
 class PropertyIn(BaseModel):
     title: str
     purpose: str = "sale"  # "sale" | "rent"
@@ -691,6 +700,57 @@ def get_me(current=Depends(get_current_user)):
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return {"id": user["id"], "name": user["name"], "email": user["email"]}
+
+
+@app.post("/api/auth/forgot-password")
+def forgot_password(payload: ForgotPasswordRequest):
+    users = load_json("users.json")
+    user = next((u for u in users if u["email"].lower() == payload.email.lower()), None)
+
+    # Always return the same success message whether or not the email is
+    # registered — this avoids leaking which emails have accounts.
+    if user:
+        reset_payload = {
+            "user_id": user["id"],
+            "email": user["email"],
+            "purpose": "reset",
+            "exp": datetime.utcnow() + timedelta(hours=1),
+        }
+        token = jwt.encode(reset_payload, JWT_SECRET, algorithm="HS256")
+        reset_link = f"{SITE_URL}/reset-password?token={token}"
+        send_email(
+            user["email"],
+            "Password Reset — Skyline Properties",
+            f"""
+            <p>Namaste {user['name']},</p>
+            <p>Aapne apna password reset karne ki request ki hai. Neeche diye gaye link par click karke naya password set karein:</p>
+            <p><a href="{reset_link}">Password Reset Karein →</a></p>
+            <p style="color:#6b7a90;font-size:13px;">Ye link 1 ghante ke liye valid hai. Agar aapne ye request nahi ki, to is email ko ignore kar dein — aapka password nahi badlega.</p>
+            <p>— Skyline Properties, Gorakhpur</p>
+            """,
+        )
+
+    return {"success": True, "message": "Agar ye email registered hai, to reset link bhej diya gaya hai. Apna inbox check karein."}
+
+
+@app.post("/api/auth/reset-password")
+def reset_password(payload: ResetPasswordRequest):
+    try:
+        decoded = jwt.decode(payload.token, JWT_SECRET, algorithms=["HS256"])
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=400, detail="Reset link invalid ya expire ho chuka hai. Dobara try karein.")
+
+    if decoded.get("purpose") != "reset":
+        raise HTTPException(status_code=400, detail="Invalid reset link")
+
+    users = load_json("users.json")
+    user = next((u for u in users if u["id"] == decoded["user_id"]), None)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    user["password_hash"] = pwd_context.hash(payload.new_password)
+    save_json("users.json", users)
+    return {"success": True, "message": "Password successfully reset ho gaya! Ab naye password se login karein."}
 
 
 # ---------- Favorites (requires login) ----------

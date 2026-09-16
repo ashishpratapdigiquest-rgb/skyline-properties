@@ -47,6 +47,10 @@ function LoginForm() {
           />
         </div>
 
+        <div className="text-right mb-4">
+          <Link href="/forgot-password" className="text-brand text-xs font-semibold hover:underline">Password bhool gaye?</Link>
+        </div>
+
         {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
 
         <button type="submit" disabled={loading} className="btn btn-primary w-full justify-center disabled:opacity-60">
