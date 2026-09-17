@@ -172,6 +172,23 @@ export async function adminDeleteTestimonial(key, id) {
   return res.json();
 }
 
+// ---- Analytics ----
+export async function adminGetAnalytics(key) {
+  const res = await fetch(`${API_URL}/api/admin/analytics`, {
+    headers: { "X-Admin-Key": key },
+  });
+  if (!res.ok) throw new Error("Failed to load analytics");
+  return res.json();
+}
+
+export async function adminGetLeads(key) {
+  const res = await fetch(`${API_URL}/api/admin/leads`, {
+    headers: { "X-Admin-Key": key },
+  });
+  if (!res.ok) throw new Error("Failed to load leads");
+  return res.json();
+}
+
 // ---- Site Settings ----
 export async function adminUpdateSettings(key, data) {
   const res = await fetch(`${API_URL}/api/settings`, {

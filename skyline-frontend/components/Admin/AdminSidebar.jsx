@@ -4,7 +4,9 @@ import { usePathname, useRouter } from "next/navigation";
 import { clearAdminKey } from "@/lib/adminApi";
 
 const NAV_ITEMS = [
+  { href: "/admin/dashboard", label: "Dashboard", icon: "📊" },
   { href: "/admin/properties", label: "Properties", icon: "🏠" },
+  { href: "/admin/leads", label: "Leads", icon: "📨" },
   { href: "/admin/blog", label: "Blog", icon: "📝" },
   { href: "/admin/agents", label: "Agents", icon: "👤" },
   { href: "/admin/testimonials", label: "Testimonials", icon: "💬" },

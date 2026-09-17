@@ -367,8 +367,11 @@ def get_areas():
 @app.get("/api/properties/{slug_or_id}")
 def get_property(slug_or_id: str):
     properties = load_json("properties.json")
-    for p in properties:
+    for i, p in enumerate(properties):
         if p.get("slug") == slug_or_id or str(p["id"]) == slug_or_id:
+            p["views"] = p.get("views", 0) + 1
+            properties[i] = p
+            save_json("properties.json", properties)
             return p
     raise HTTPException(status_code=404, detail="Property not found")
 
@@ -624,6 +627,100 @@ def submit_comment(slug: str, payload: CommentIn):
     comments.append(comment)
     save_json("comments.json", comments)
     return {"success": True, "message": "Comment submit ho gaya! Admin approve karne ke baad website par dikhega."}
+
+
+@app.get("/api/admin/leads")
+def get_all_leads(x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    contact_submissions = load_json("contact_submissions.json")
+    property_alerts = load_json("property_alerts.json")
+
+    leads = []
+    for c in contact_submissions:
+        leads.append({
+            "type": "Contact Form",
+            "name": c.get("name"),
+            "contact": c.get("email"),
+            "detail": c.get("message", ""),
+            "date": c.get("received_at"),
+        })
+    for a in property_alerts:
+        leads.append({
+            "type": "Property Alert",
+            "name": a.get("name"),
+            "contact": f"{a.get('phone', '')} / {a.get('email', '')}",
+            "detail": f"Purpose: {a.get('purpose', 'any')} • Area: {a.get('area', 'any')} • Type: {a.get('property_type', 'any')} • Budget: {a.get('max_budget', 'n/a')}",
+            "date": a.get("created_at"),
+        })
+    leads.sort(key=lambda l: l.get("date") or "", reverse=True)
+    return leads
+
+
+@app.get("/api/admin/analytics")
+def get_analytics(x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+
+    properties = load_json("properties.json")
+    agents = load_json("agents.json")
+    blog_posts = load_json("blog.json")
+    testimonials = load_json("testimonials.json")
+    comments = load_json("comments.json")
+    users = load_json("users.json")
+    contact_submissions = load_json("contact_submissions.json")
+    property_alerts = load_json("property_alerts.json")
+
+    # Property type breakdown
+    type_counts = {}
+    for p in properties:
+        t = p.get("propertyType", "Other")
+        type_counts[t] = type_counts.get(t, 0) + 1
+
+    # Sale vs rent breakdown
+    purpose_counts = {"sale": 0, "rent": 0}
+    for p in properties:
+        purpose = p.get("purpose", "sale")
+        purpose_counts[purpose] = purpose_counts.get(purpose, 0) + 1
+
+    # Top 5 most-viewed properties
+    top_properties = sorted(properties, key=lambda p: p.get("views", 0), reverse=True)[:5]
+    top_properties = [{"title": p["title"], "slug": p["slug"], "views": p.get("views", 0)} for p in top_properties]
+
+    # Recent leads (contact submissions + property alerts), newest first
+    leads = []
+    for c in contact_submissions:
+        leads.append({
+            "type": "Contact Form",
+            "name": c.get("name"),
+            "contact": c.get("email"),
+            "detail": c.get("message", "")[:80],
+            "date": c.get("received_at"),
+        })
+    for a in property_alerts:
+        leads.append({
+            "type": "Property Alert",
+            "name": a.get("name"),
+            "contact": a.get("phone") or a.get("email"),
+            "detail": f"{a.get('purpose', 'any')} • {a.get('area', 'any area')} • budget: {a.get('max_budget', 'n/a')}",
+            "date": a.get("created_at"),
+        })
+    leads.sort(key=lambda l: l.get("date") or "", reverse=True)
+
+    return {
+        "counts": {
+            "properties": len(properties),
+            "agents": len(agents),
+            "blog_posts": len(blog_posts),
+            "testimonials": len(testimonials),
+            "pending_comments": len([c for c in comments if not c.get("approved")]),
+            "approved_comments": len([c for c in comments if c.get("approved")]),
+            "registered_users": len(users),
+            "total_leads": len(contact_submissions) + len(property_alerts),
+        },
+        "type_counts": type_counts,
+        "purpose_counts": purpose_counts,
+        "top_properties": top_properties,
+        "recent_leads": leads[:10],
+    }
 
 
 @app.get("/api/admin/comments")

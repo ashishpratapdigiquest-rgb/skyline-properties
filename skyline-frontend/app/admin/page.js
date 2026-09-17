@@ -17,7 +17,7 @@ export default function AdminLoginPage() {
     setLoading(false);
     if (ok) {
       storeAdminKey(password);
-      router.push("/admin/properties");
+      router.push("/admin/dashboard");
     } else {
       setError("Incorrect password. Please try again.");
     }
