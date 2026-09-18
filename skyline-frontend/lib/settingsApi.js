@@ -11,7 +11,7 @@ const DEFAULT_SETTINGS = {
 
 export async function getSettings() {
   try {
-    const res = await fetch(`${API_URL}/api/settings`, { cache: "no-store" });
+    const res = await fetch(`${API_URL}/api/settings`, { next: { revalidate: 60 } });
     if (!res.ok) throw new Error("Request failed");
     return await res.json();
   } catch {

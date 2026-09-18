@@ -31,7 +31,7 @@ function buildQuery(params = {}) {
 
 async function safeGet(path, fallback) {
   try {
-    const res = await fetch(`${API_URL}${path}`, { cache: "no-store" });
+    const res = await fetch(`${API_URL}${path}`, { next: { revalidate: 30 } });
     if (!res.ok) throw new Error(`Request failed: ${res.status}`);
     return await res.json();
   } catch (err) {

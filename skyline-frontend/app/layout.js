@@ -7,7 +7,7 @@ import CompareBar from "@/components/Property/CompareBar";
 import { AuthProvider } from "@/components/Auth/AuthProvider";
 import { getSettings } from "@/lib/settingsApi";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export const metadata = {
   title: "Skyline Properties | Gorakhpur Ke Best Property Dealer",

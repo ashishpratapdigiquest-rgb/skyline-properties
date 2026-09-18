@@ -2,7 +2,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 async function safeFetch(path, fallback) {
   try {
-    const res = await fetch(`${API_URL}${path}`, { cache: "no-store" });
+    const res = await fetch(`${API_URL}${path}`, { next: { revalidate: 60 } });
     if (!res.ok) throw new Error("Bad response");
     return await res.json();
   } catch (err) {
