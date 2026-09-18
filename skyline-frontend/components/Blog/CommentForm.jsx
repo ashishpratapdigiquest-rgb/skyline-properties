@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
 import { submitComment } from "@/lib/blogApi";
+import HoneypotField from "@/components/HoneypotField";
 
 export default function CommentForm({ slug }) {
-  const [form, setForm] = useState({ name: "", email: "", comment: "" });
+  const [form, setForm] = useState({ name: "", email: "", comment: "", website: "" });
   const [note, setNote] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -18,13 +19,14 @@ export default function CommentForm({ slug }) {
     setNote(res.message);
     setLoading(false);
     if (res.success !== false) {
-      setForm({ name: "", email: "", comment: "" });
+      setForm({ name: "", email: "", comment: "", website: "" });
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="bg-white border border-slate-200 rounded-2xl p-6">
       <h3 className="font-display text-lg font-semibold text-navy mb-4">Comment Karein</h3>
+      <HoneypotField value={form.website} onChange={(v) => update("website", v)} />
       <div className="grid sm:grid-cols-2 gap-4 mb-4">
         <input required value={form.name} onChange={(e) => update("name", e.target.value)} type="text" placeholder="Aapka Naam"
           className="w-full px-3.5 py-3 border border-slate-200 rounded-lg text-sm outline-none focus:border-brand" />

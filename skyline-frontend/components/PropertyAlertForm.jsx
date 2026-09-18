@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
 import { createPropertyAlert } from "@/lib/propertyApi";
+import HoneypotField from "@/components/HoneypotField";
 
 export default function PropertyAlertForm({ areas = [], propertyTypes = [] }) {
-  const [form, setForm] = useState({ name: "", phone: "", email: "", purpose: "sale", area: "", property_type: "", max_budget: "" });
+  const [form, setForm] = useState({ name: "", phone: "", email: "", purpose: "sale", area: "", property_type: "", max_budget: "", website: "" });
   const [note, setNote] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -19,12 +20,13 @@ export default function PropertyAlertForm({ areas = [], propertyTypes = [] }) {
     setNote(res.message);
     setLoading(false);
     if (res.success !== false) {
-      setForm({ name: "", phone: "", email: "", purpose: "sale", area: "", property_type: "", max_budget: "" });
+      setForm({ name: "", phone: "", email: "", purpose: "sale", area: "", property_type: "", max_budget: "", website: "" });
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="bg-white border border-slate-200 rounded-2xl p-7 shadow-elevated">
+      <HoneypotField value={form.website} onChange={(v) => update("website", v)} />
       <div className="grid sm:grid-cols-2 gap-4 mb-4">
         <div>
           <label className="block text-[13px] font-semibold text-navy mb-1.5">Aapka Naam</label>

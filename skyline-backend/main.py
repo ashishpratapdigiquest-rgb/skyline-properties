@@ -3,7 +3,7 @@ Skyline Properties — FastAPI backend
 Serves properties, agents, blog posts, and accepts contact form submissions.
 Run locally:  uvicorn main:app --reload --port 8000
 """
-from fastapi import FastAPI, HTTPException, Header, Depends
+from fastapi import FastAPI, HTTPException, Header, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr
 from typing import Optional
@@ -37,6 +37,40 @@ def get_current_user(authorization: Optional[str] = Header(default=None)):
 app = FastAPI(title="Skyline Properties API", version="1.0.0")
 
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "changeme")
+
+# ---------- Spam protection: rate limiting ----------
+from collections import defaultdict
+import time
+
+_RATE_LIMIT_STORE = defaultdict(list)
+
+
+def get_client_ip(request: Request) -> str:
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.client.host if request.client else "unknown"
+
+
+def rate_limit(request: Request, bucket: str, max_requests: int, window_seconds: int):
+    """
+    Simple in-memory sliding-window rate limiter, keyed by (bucket, client IP).
+    Resets on server restart — that's fine for spam protection, which
+    doesn't need to be perfectly persistent, just effective in practice.
+    """
+    ip = get_client_ip(request)
+    key = f"{bucket}:{ip}"
+    now = time.time()
+    timestamps = _RATE_LIMIT_STORE[key]
+    timestamps[:] = [t for t in timestamps if now - t < window_seconds]
+    if len(timestamps) >= max_requests:
+        raise HTTPException(status_code=429, detail="Bahut zyada requests bhej di hain. Thodi der baad try karein.")
+    timestamps.append(now)
+
+
+def is_spam_honeypot(value: Optional[str]) -> bool:
+    """True if the hidden honeypot field was filled — a real user never sees it."""
+    return bool(value)
 
 # ---------- Email (Brevo — free tier, 300 emails/day forever) ----------
 BREVO_API_KEY = os.environ.get("BREVO_API_KEY")  # set this in Render env vars
@@ -107,6 +141,7 @@ class ContactMessage(BaseModel):
     phone: Optional[str] = None
     interest: Optional[str] = "Buying a property"
     message: str
+    website: Optional[str] = ""  # honeypot — real users leave this blank
 
 
 class NewsletterSignup(BaseModel):
@@ -122,6 +157,7 @@ class PropertyAlert(BaseModel):
     area: Optional[str] = None
     property_type: Optional[str] = None
     max_budget: Optional[float] = None
+    website: Optional[str] = ""  # honeypot
 
 
 class BlogPostIn(BaseModel):
@@ -144,6 +180,7 @@ class CommentIn(BaseModel):
     name: str
     email: EmailStr
     comment: str
+    website: Optional[str] = ""  # honeypot
 
 
 class AgentIn(BaseModel):
@@ -189,6 +226,7 @@ class UserRegister(BaseModel):
     name: str
     email: EmailStr
     password: str
+    website: Optional[str] = ""  # honeypot
 
 
 class UserLogin(BaseModel):
@@ -442,7 +480,8 @@ def delete_agent(agent_id: int, x_admin_key: Optional[str] = Header(default=None
 
 # ---------- Admin (protected via X-Admin-Key header) ----------
 @app.get("/api/admin/verify")
-def check_admin_key(x_admin_key: Optional[str] = Header(default=None)):
+def check_admin_key(request: Request, x_admin_key: Optional[str] = Header(default=None)):
+    rate_limit(request, "admin_login", max_requests=10, window_seconds=900)
     if not x_admin_key or x_admin_key != ADMIN_PASSWORD:
         raise HTTPException(status_code=401, detail="Invalid admin key")
     return {"success": True}
@@ -608,10 +647,14 @@ def get_approved_comments(slug: str):
 
 
 @app.post("/api/blog/{slug}/comments")
-def submit_comment(slug: str, payload: CommentIn):
+def submit_comment(slug: str, payload: CommentIn, request: Request):
     posts = load_json("blog.json")
     if not any(p["slug"] == slug for p in posts):
         raise HTTPException(status_code=404, detail="Post not found")
+
+    if is_spam_honeypot(payload.website):
+        return {"success": True, "message": "Comment submit ho gaya! Admin approve karne ke baad website par dikhega."}
+    rate_limit(request, "comments", max_requests=10, window_seconds=3600)
 
     comments = load_json("comments.json")
     new_id = max([c["id"] for c in comments], default=0) + 1
@@ -759,7 +802,11 @@ def delete_comment(comment_id: int, x_admin_key: Optional[str] = Header(default=
 
 # ---------- Auth ----------
 @app.post("/api/auth/register")
-def register(payload: UserRegister):
+def register(payload: UserRegister, request: Request):
+    if is_spam_honeypot(payload.website):
+        raise HTTPException(status_code=400, detail="Registration failed")
+    rate_limit(request, "register", max_requests=5, window_seconds=3600)
+
     users = load_json("users.json")
     if any(u["email"].lower() == payload.email.lower() for u in users):
         raise HTTPException(status_code=400, detail="Is email se pehle se ek account bana hua hai")
@@ -780,7 +827,8 @@ def register(payload: UserRegister):
 
 
 @app.post("/api/auth/login")
-def login(payload: UserLogin):
+def login(payload: UserLogin, request: Request):
+    rate_limit(request, "login", max_requests=10, window_seconds=900)
     users = load_json("users.json")
     user = next((u for u in users if u["email"].lower() == payload.email.lower()), None)
     if not user or not pwd_context.verify(payload.password, user["password_hash"]):
@@ -800,7 +848,8 @@ def get_me(current=Depends(get_current_user)):
 
 
 @app.post("/api/auth/forgot-password")
-def forgot_password(payload: ForgotPasswordRequest):
+def forgot_password(payload: ForgotPasswordRequest, request: Request):
+    rate_limit(request, "forgot_password", max_requests=5, window_seconds=3600)
     users = load_json("users.json")
     user = next((u for u in users if u["email"].lower() == payload.email.lower()), None)
 
@@ -939,9 +988,13 @@ def delete_testimonial(testimonial_id: int, x_admin_key: Optional[str] = Header(
 
 
 @app.post("/api/contact")
-def submit_contact(payload: ContactMessage):
+def submit_contact(payload: ContactMessage, request: Request):
+    if is_spam_honeypot(payload.website):
+        return {"success": True, "message": "Thanks! A Skyline agent will reach out shortly."}
+    rate_limit(request, "contact", max_requests=5, window_seconds=3600)
+
     entries = load_json("contact_submissions.json")
-    entry = payload.dict()
+    entry = payload.dict(exclude={"website"})
     entry["received_at"] = datetime.utcnow().isoformat()
     entries.append(entry)
     save_json("contact_submissions.json", entries)
@@ -949,13 +1002,14 @@ def submit_contact(payload: ContactMessage):
 
 
 @app.post("/api/newsletter")
-def subscribe_newsletter(payload: NewsletterSignup):
+def subscribe_newsletter(payload: NewsletterSignup, request: Request):
+    rate_limit(request, "newsletter", max_requests=5, window_seconds=3600)
     # In production, push this to an email provider (Mailchimp, Resend, etc.)
     return {"success": True, "message": f"Subscribed {payload.email} successfully."}
 
 
 @app.post("/api/property-alerts")
-def create_property_alert(payload: PropertyAlert):
+def create_property_alert(payload: PropertyAlert, request: Request):
     """
     Captures a buyer's search criteria so the team can follow up when a
     matching property is listed. NOTE: matching-property emails go out
@@ -963,8 +1017,12 @@ def create_property_alert(payload: PropertyAlert):
     configured — but there's no scheduled re-check job, so alerts only
     fire at the moment a new property is created via the admin panel.
     """
+    if is_spam_honeypot(payload.website):
+        return {"success": True, "message": "Alert saved! Hum matching property milte hi aapko email karenge."}
+    rate_limit(request, "property_alerts", max_requests=5, window_seconds=3600)
+
     entries = load_json("property_alerts.json")
-    entry = payload.dict()
+    entry = payload.dict(exclude={"website"})
     entry["created_at"] = datetime.utcnow().isoformat()
     entries.append(entry)
     save_json("property_alerts.json", entries)

@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
 import { submitContact } from "@/lib/api";
+import HoneypotField from "@/components/HoneypotField";
 
 export default function ContactForm() {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", interest: "Buying a property", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", interest: "Buying a property", message: "", website: "" });
   const [note, setNote] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -18,7 +19,7 @@ export default function ContactForm() {
     setNote(res.message);
     setLoading(false);
     if (res.success !== false) {
-      setForm({ name: "", email: "", phone: "", interest: "Buying a property", message: "" });
+      setForm({ name: "", email: "", phone: "", interest: "Buying a property", message: "", website: "" });
     }
   }
 
@@ -26,6 +27,7 @@ export default function ContactForm() {
     <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-elevated">
       <h3 className="font-display text-xl font-semibold text-navy mb-5">Send Us a Message</h3>
       <form onSubmit={handleSubmit}>
+        <HoneypotField value={form.website} onChange={(v) => update("website", v)} />
         <div className="grid sm:grid-cols-2 gap-4 mb-4">
           <div>
             <label className="block text-[13px] font-semibold text-navy mb-1.5">Full Name</label>

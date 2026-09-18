@@ -14,11 +14,11 @@ export function clearToken() {
   if (typeof window !== "undefined") localStorage.removeItem(TOKEN_KEY);
 }
 
-export async function registerUser(name, email, password) {
+export async function registerUser(name, email, password, website = "") {
   const res = await fetch(`${API_URL}/api/auth/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, email, password }),
+    body: JSON.stringify({ name, email, password, website }),
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.detail || "Registration failed");

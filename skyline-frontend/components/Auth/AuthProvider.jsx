@@ -41,8 +41,8 @@ export function AuthProvider({ children }) {
     await refreshFavorites(token);
   }
 
-  async function register(name, email, password) {
-    const { token, user: u } = await registerUser(name, email, password);
+  async function register(name, email, password, website = "") {
+    const { token, user: u } = await registerUser(name, email, password, website);
     storeToken(token);
     setUser(u);
     await refreshFavorites(token);

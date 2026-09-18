@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/components/Auth/AuthProvider";
+import HoneypotField from "@/components/HoneypotField";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -10,6 +11,7 @@ export default function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [website, setWebsite] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -18,7 +20,7 @@ export default function SignupPage() {
     setLoading(true);
     setError("");
     try {
-      await register(name, email, password);
+      await register(name, email, password, website);
       router.push("/favorites");
     } catch (err) {
       setError(err.message);
@@ -30,6 +32,7 @@ export default function SignupPage() {
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-6 py-16">
       <form onSubmit={handleSubmit} className="w-full max-w-sm bg-white border border-slate-200 rounded-2xl p-8 shadow-elevated">
+        <HoneypotField value={website} onChange={setWebsite} />
         <h1 className="font-display text-xl font-semibold text-navy mb-1">Account Banayein</h1>
         <p className="text-slate-500 text-sm mb-6">Properties save karne ke liye free account banayein.</p>
 
