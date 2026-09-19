@@ -172,6 +172,24 @@ export async function adminDeleteTestimonial(key, id) {
   return res.json();
 }
 
+export async function adminGetAllTestimonials(key, status = "") {
+  const qs = status ? `?status=${status}` : "";
+  const res = await fetch(`${API_URL}/api/admin/testimonials${qs}`, {
+    headers: { "X-Admin-Key": key },
+  });
+  if (!res.ok) throw new Error("Failed to load testimonials");
+  return res.json();
+}
+
+export async function adminApproveTestimonial(key, id) {
+  const res = await fetch(`${API_URL}/api/admin/testimonials/${id}/approve`, {
+    method: "PUT",
+    headers: { "X-Admin-Key": key },
+  });
+  if (!res.ok) throw new Error("Failed to approve testimonial");
+  return res.json();
+}
+
 // ---- Analytics ----
 export async function adminGetAnalytics(key) {
   const res = await fetch(`${API_URL}/api/admin/analytics`, {

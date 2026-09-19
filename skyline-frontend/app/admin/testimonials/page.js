@@ -1,8 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getTestimonials } from "@/lib/api";
-import { getStoredAdminKey, adminCreateTestimonial, adminUpdateTestimonial, adminDeleteTestimonial } from "@/lib/adminApi";
+import { getStoredAdminKey, adminGetAllTestimonials, adminApproveTestimonial, adminCreateTestimonial, adminUpdateTestimonial, adminDeleteTestimonial } from "@/lib/adminApi";
 
 const EMPTY_FORM = { name: "", rating: 5, quote: "", photo: "" };
 
@@ -10,6 +9,7 @@ export default function AdminTestimonialsPage() {
   const router = useRouter();
   const [key, setKey] = useState(null);
   const [items, setItems] = useState([]);
+  const [filter, setFilter] = useState("pending");
   const [loading, setLoading] = useState(true);
   const [formOpen, setFormOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -26,12 +26,17 @@ export default function AdminTestimonialsPage() {
   useEffect(() => {
     if (!key) return;
     load();
-  }, [key]);
+  }, [key, filter]);
 
   async function load() {
     setLoading(true);
-    setItems(await getTestimonials());
+    setItems(await adminGetAllTestimonials(key, filter));
     setLoading(false);
+  }
+
+  async function handleApprove(item) {
+    await adminApproveTestimonial(key, item.id);
+    await load();
   }
 
   function openAdd() {
@@ -89,28 +94,52 @@ export default function AdminTestimonialsPage() {
       <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="font-display text-2xl font-bold text-navy">Manage Testimonials</h1>
-          <p className="text-slate-500 text-sm mt-1">Add, edit, or remove customer reviews shown on the homepage.</p>
+          <p className="text-slate-500 text-sm mt-1">Customer reviews approve karein ya khud bhi add karein.</p>
         </div>
         <button onClick={openAdd} className="btn btn-primary">+ Add Testimonial</button>
       </div>
 
+      <div className="flex gap-2 mb-6">
+        {["pending", "approved", ""].map((f) => (
+          <button
+            key={f || "all"}
+            onClick={() => setFilter(f)}
+            className={`px-4 py-2 rounded-lg text-sm font-medium border ${filter === f ? "bg-brand text-white border-brand" : "bg-white text-slate-600 border-slate-200"}`}
+          >
+            {f === "" ? "All" : f === "pending" ? "Pending" : "Approved"}
+          </button>
+        ))}
+      </div>
+
       {loading ? (
         <p className="text-slate-500">Loading...</p>
+      ) : items.length === 0 ? (
+        <div className="text-center py-16 bg-white border border-slate-200 rounded-2xl">
+          <p className="text-slate-500">Koi testimonial nahi mila.</p>
+        </div>
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {items.map((t) => (
             <div key={t.id} className="bg-white border border-slate-200 rounded-[10px] p-5">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0">
-                  <img src={t.photo} alt={t.name} className="w-full h-full object-cover" />
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0">
+                    <img src={t.photo} alt={t.name} className="w-full h-full object-cover" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-navy text-sm">{t.name}</div>
+                    <div className="text-amber-400 text-xs">{"★".repeat(t.rating)}</div>
+                  </div>
                 </div>
-                <div>
-                  <div className="font-semibold text-navy text-sm">{t.name}</div>
-                  <div className="text-amber-400 text-xs">{"★".repeat(t.rating)}</div>
-                </div>
+                {!t.approved && (
+                  <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-amber-100 text-amber-700 whitespace-nowrap">PENDING</span>
+                )}
               </div>
               <p className="text-slate-600 text-sm italic mb-3">{t.quote}</p>
-              <div className="flex gap-3 text-sm">
+              <div className="flex gap-3 text-sm flex-wrap">
+                {!t.approved && (
+                  <button onClick={() => handleApprove(t)} className="text-green-600 font-semibold hover:underline">Approve</button>
+                )}
                 <button onClick={() => openEdit(t)} className="text-brand font-semibold hover:underline">Edit</button>
                 <button onClick={() => handleDelete(t)} className="text-red-500 font-semibold hover:underline">Delete</button>
               </div>

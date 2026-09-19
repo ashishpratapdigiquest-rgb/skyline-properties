@@ -20,6 +20,19 @@ export async function getTestimonials() {
   return safeFetch("/api/testimonials", FALLBACK_TESTIMONIALS);
 }
 
+export async function submitTestimonial(payload) {
+  try {
+    const res = await fetch(`${API_URL}/api/testimonials/submit`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    return await res.json();
+  } catch (err) {
+    return { success: false, message: "Could not reach the server. Please try again shortly." };
+  }
+}
+
 export async function submitContact(payload) {
   try {
     const res = await fetch(`${API_URL}/api/contact`, {

@@ -206,6 +206,13 @@ class TestimonialIn(BaseModel):
     photo: Optional[str] = None
 
 
+class TestimonialSubmit(BaseModel):
+    name: str
+    rating: int = 5
+    quote: str
+    website: Optional[str] = ""  # honeypot
+
+
 class TestimonialUpdate(BaseModel):
     name: Optional[str] = None
     rating: Optional[int] = None
@@ -946,7 +953,54 @@ def update_settings(payload: SiteSettingsUpdate, x_admin_key: Optional[str] = He
 
 @app.get("/api/testimonials")
 def get_testimonials():
-    return load_json("testimonials.json")
+    testimonials = load_json("testimonials.json")
+    return [t for t in testimonials if t.get("approved", True)]
+
+
+@app.post("/api/testimonials/submit")
+def submit_testimonial(payload: TestimonialSubmit, request: Request):
+    """Public submission — goes into a pending queue until admin approves it."""
+    if is_spam_honeypot(payload.website):
+        return {"success": True, "message": "Dhanyawad! Aapka review submit ho gaya."}
+    rate_limit(request, "testimonial_submit", max_requests=5, window_seconds=3600)
+
+    testimonials = load_json("testimonials.json")
+    new_id = max([t["id"] for t in testimonials], default=0) + 1
+    record = {
+        "id": new_id,
+        "name": payload.name,
+        "rating": payload.rating,
+        "quote": payload.quote,
+        "photo": "https://randomuser.me/api/portraits/lego/2.jpg",
+        "approved": False,
+        "created_at": datetime.utcnow().isoformat(),
+    }
+    testimonials.append(record)
+    save_json("testimonials.json", testimonials)
+    return {"success": True, "message": "Dhanyawad! Aapka review admin approve karne ke baad website par dikhega."}
+
+
+@app.get("/api/admin/testimonials")
+def list_all_testimonials(status: Optional[str] = None, x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    testimonials = load_json("testimonials.json")
+    if status == "pending":
+        testimonials = [t for t in testimonials if not t.get("approved", True)]
+    elif status == "approved":
+        testimonials = [t for t in testimonials if t.get("approved", True)]
+    return testimonials
+
+
+@app.put("/api/admin/testimonials/{testimonial_id}/approve")
+def approve_testimonial(testimonial_id: int, x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    testimonials = load_json("testimonials.json")
+    for t in testimonials:
+        if t["id"] == testimonial_id:
+            t["approved"] = True
+            save_json("testimonials.json", testimonials)
+            return t
+    raise HTTPException(status_code=404, detail="Testimonial not found")
 
 
 @app.post("/api/testimonials")
@@ -956,6 +1010,7 @@ def create_testimonial(payload: TestimonialIn, x_admin_key: Optional[str] = Head
     new_id = max([t["id"] for t in testimonials], default=0) + 1
     record = payload.dict()
     record["id"] = new_id
+    record["approved"] = True
     if not record.get("photo"):
         record["photo"] = "https://randomuser.me/api/portraits/lego/2.jpg"
     testimonials.append(record)

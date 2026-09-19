@@ -7,6 +7,7 @@ import { getFeaturedProperties, getPropertyTypes } from "@/lib/propertyApi";
 import { getBlogPosts } from "@/lib/blogApi";
 import { getSettings } from "@/lib/settingsApi";
 import NewsletterForm from "@/components/NewsletterForm";
+import TestimonialSubmitForm from "@/components/TestimonialSubmitForm";
 
 const CATEGORY_ICONS = {
   Apartment: "🏢",
@@ -290,6 +291,9 @@ export default async function HomePage() {
                 <p className="italic text-[14.5px] text-slate-600">{t.quote}</p>
               </div>
             ))}
+          </div>
+          <div className="mt-11">
+            <TestimonialSubmitForm />
           </div>
         </div>
       </section>
