@@ -1,0 +1,20 @@
+name: Keep Backend Awake
+
+# Render's free plan spins the backend down after ~15 minutes of no
+# incoming requests, causing the first real visitor to wait 30-50s while
+# it wakes back up. This workflow pings the backend every 10 minutes so
+# it never goes idle long enough to sleep — completely free, no extra
+# account or service needed since it runs on GitHub's own infrastructure.
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch: {}  # lets you trigger it manually from the Actions tab too
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping backend health endpoint
+        run: |
+          curl -sf -o /dev/null -w "Backend responded: %{http_code}\n" https://skyline-backend-nxfq.onrender.com/ || echo "Ping failed (backend may have been mid-wakeup) — will retry next cycle"
