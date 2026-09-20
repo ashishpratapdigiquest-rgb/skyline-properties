@@ -8,6 +8,7 @@ import { getBlogPosts } from "@/lib/blogApi";
 import { getSettings } from "@/lib/settingsApi";
 import NewsletterForm from "@/components/NewsletterForm";
 import TestimonialSubmitForm from "@/components/TestimonialSubmitForm";
+import HeroSearchBar from "@/components/HeroSearchBar";
 
 const CATEGORY_ICONS = {
   Apartment: "🏢",
@@ -89,25 +90,7 @@ export default async function HomePage() {
 
         {/* Search bar */}
         <div className="max-w-[1180px] mx-auto px-6 mt-8">
-          <div className="bg-white border border-slate-200 rounded-2xl shadow-elevated grid grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_1fr_auto]">
-            {[
-              { label: "📍 Location", val: "Select Location" },
-              { label: "🏠 Type", val: "Property Type" },
-              { label: "💲 Budget", val: "Select Budget" },
-              { label: "📐 Size", val: "Select Size" },
-            ].map((f, i) => (
-              <div key={f.label} className={`px-5.5 py-4 ${i < 3 ? "lg:border-r border-slate-200" : ""}`}>
-                <label className="block text-[11px] text-slate-500 mb-1">{f.label}</label>
-                <div className="text-[14.5px] font-semibold text-navy flex items-center justify-between">
-                  {f.val} <span>▾</span>
-                </div>
-              </div>
-            ))}
-            <button className="bg-brand hover:bg-brand-dark text-white rounded-b-2xl lg:rounded-b-none lg:rounded-r-2xl px-8 py-4 font-semibold flex items-center justify-center gap-2 col-span-2 lg:col-span-1">
-              Search Now
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#fff" strokeWidth="2" /><path d="M21 21l-4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" /></svg>
-            </button>
-          </div>
+          <HeroSearchBar />
         </div>
 
         {/* Stat strip */}

@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import PropertyCard from "@/components/Property/PropertyCard";
 import PropertyFilters from "@/components/Property/PropertyFilters";
 import PropertySkeleton from "@/components/Common/PropertySkeleton";
-import { getProperties, getPropertyTypes, getPropertyLocations } from "@/lib/propertyApi";
+import { getProperties, getPropertyTypes, getAreas } from "@/lib/propertyApi";
 
 const PropertyMap = dynamic(() => import("@/components/Property/PropertyMap"), {
   ssr: false,
@@ -20,7 +20,7 @@ const SORT_OPTIONS = [
   { value: "most_viewed", label: "Most Viewed" },
 ];
 
-const FILTER_KEYS = ["q", "city", "property_type", "purpose", "min_price", "max_price", "beds", "baths", "min_area", "max_area", "featured"];
+const FILTER_KEYS = ["q", "city", "area", "property_type", "purpose", "min_price", "max_price", "beds", "baths", "min_area", "max_area", "featured"];
 
 function readFiltersFromParams(searchParams) {
   const filters = {};
@@ -45,7 +45,7 @@ export default function PropertiesClient() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [propertyTypes, setPropertyTypes] = useState([]);
-  const [locations, setLocations] = useState([]);
+  const [areas, setAreas] = useState([]);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [view, setView] = useState("grid");
 
@@ -54,7 +54,7 @@ export default function PropertiesClient() {
   // Load filter option lists once
   useEffect(() => {
     getPropertyTypes().then(setPropertyTypes);
-    getPropertyLocations().then(setLocations);
+    getAreas().then(setAreas);
   }, []);
 
   // Sync state -> URL (shareable, back/forward friendly)
@@ -146,7 +146,7 @@ export default function PropertiesClient() {
         onChange={handleFiltersChange}
         onClear={handleClearFilters}
         propertyTypes={propertyTypes}
-        locations={locations}
+        areas={areas}
         isOpen={filtersOpen}
         onClose={() => setFiltersOpen(false)}
       />

@@ -7,7 +7,7 @@ export default function PropertyFilters({
   onChange,
   onClear,
   propertyTypes = [],
-  locations = [],
+  areas = [],
   isOpen = false,
   onClose,
 }) {
@@ -47,16 +47,16 @@ export default function PropertyFilters({
 
       {/* Location */}
       <div>
-        <label htmlFor="filter-city" className="block text-[13px] font-semibold text-navy mb-2">Location</label>
+        <label htmlFor="filter-area" className="block text-[13px] font-semibold text-navy mb-2">Location</label>
         <select
-          id="filter-city"
-          value={filters.city || ""}
-          onChange={(e) => update("city", e.target.value)}
+          id="filter-area"
+          value={filters.area || ""}
+          onChange={(e) => update("area", e.target.value)}
           className="w-full px-3.5 py-2.5 border border-slate-200 rounded-lg text-sm outline-none focus:border-brand"
         >
           <option value="">All Locations</option>
-          {locations.map((loc) => (
-            <option key={loc} value={loc}>{loc}</option>
+          {areas.map((a) => (
+            <option key={a} value={a}>{a}</option>
           ))}
         </select>
       </div>
