@@ -224,6 +224,7 @@ class SiteSettingsUpdate(BaseModel):
     site_name: Optional[str] = None
     logo_image: Optional[str] = None
     phone_number: Optional[str] = None
+    phone_number_2: Optional[str] = None
     whatsapp_number: Optional[str] = None
     email: Optional[str] = None
     address: Optional[str] = None

@@ -102,6 +102,13 @@ export default function AdminSettingsPage() {
         </div>
 
         <div>
+          <label className="block text-[13px] font-semibold text-navy mb-1.5">Second Phone Number (optional)</label>
+          <input value={form.phone_number_2 || ""} onChange={(e) => update("phone_number_2", e.target.value)} placeholder="+91 8182820987"
+            className="w-full px-3.5 py-2.5 border border-slate-200 rounded-lg text-sm outline-none focus:border-brand" />
+          <p className="text-[11.5px] text-slate-400 mt-1">Header mein pehle number ke saath dikhega. Khaali chhod sakte ho.</p>
+        </div>
+
+        <div>
           <label className="block text-[13px] font-semibold text-navy mb-1.5">WhatsApp Number</label>
           <input required value={form.whatsapp_number} onChange={(e) => update("whatsapp_number", e.target.value)} placeholder="919876543210"
             className="w-full px-3.5 py-2.5 border border-slate-200 rounded-lg text-sm outline-none focus:border-brand" />
