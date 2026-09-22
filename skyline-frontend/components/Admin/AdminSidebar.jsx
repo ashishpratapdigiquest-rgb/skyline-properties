@@ -7,9 +7,10 @@ const NAV_ITEMS = [
   { href: "/admin/dashboard", label: "Dashboard", icon: "📊" },
   { href: "/admin/properties", label: "Properties", icon: "🏠" },
   { href: "/admin/leads", label: "Leads", icon: "📨" },
+  { href: "/admin/chat", label: "Live Chat", icon: "💬" },
   { href: "/admin/blog", label: "Blog", icon: "📝" },
   { href: "/admin/agents", label: "Agents", icon: "👤" },
-  { href: "/admin/testimonials", label: "Testimonials", icon: "💬" },
+  { href: "/admin/testimonials", label: "Testimonials", icon: "⭐" },
   { href: "/admin/comments", label: "Comments", icon: "🗨️" },
   { href: "/admin/settings", label: "Settings", icon: "⚙️" },
 ];

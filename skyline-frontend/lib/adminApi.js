@@ -217,3 +217,32 @@ export async function adminUpdateSettings(key, data) {
   if (!res.ok) throw new Error((await res.json()).detail || "Failed to update settings");
   return res.json();
 }
+
+// ---- Live Chat ----
+export async function adminGetChatSessions(key) {
+  const res = await fetch(`${API_URL}/api/admin/chat/sessions`, {
+    headers: { "X-Admin-Key": key },
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error("Failed to load chat sessions");
+  return res.json();
+}
+
+export async function adminGetChatMessages(key, sessionId) {
+  const res = await fetch(`${API_URL}/api/admin/chat/${sessionId}/messages`, {
+    headers: { "X-Admin-Key": key },
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error("Failed to load messages");
+  return res.json();
+}
+
+export async function adminReplyToChat(key, sessionId, message) {
+  const res = await fetch(`${API_URL}/api/admin/chat/${sessionId}/reply`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-Admin-Key": key },
+    body: JSON.stringify({ message }),
+  });
+  if (!res.ok) throw new Error("Failed to send reply");
+  return res.json();
+}

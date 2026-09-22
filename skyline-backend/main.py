@@ -183,6 +183,16 @@ class CommentIn(BaseModel):
     website: Optional[str] = ""  # honeypot
 
 
+class ChatMessageIn(BaseModel):
+    name: str
+    message: str
+    website: Optional[str] = ""  # honeypot
+
+
+class ChatReplyIn(BaseModel):
+    message: str
+
+
 class AgentIn(BaseModel):
     name: str
     role: str
@@ -935,6 +945,88 @@ def remove_favorite(slug: str, current=Depends(get_current_user)):
     favorites = [f for f in favorites if not (f["user_id"] == current["user_id"] and f["slug"] == slug)]
     save_json("favorites.json", favorites)
     return {"success": True}
+
+
+# ---------- Live Chat ----------
+@app.get("/api/chat/{session_id}/messages")
+def get_chat_messages(session_id: str):
+    messages = load_json("chat_messages.json")
+    return [m for m in messages if m["session_id"] == session_id]
+
+
+@app.post("/api/chat/{session_id}/messages")
+def send_chat_message(session_id: str, payload: ChatMessageIn, request: Request):
+    if is_spam_honeypot(payload.website):
+        return {"success": True}
+    rate_limit(request, "chat_send", max_requests=30, window_seconds=3600)
+
+    messages = load_json("chat_messages.json")
+    new_id = max([m["id"] for m in messages], default=0) + 1
+    message = {
+        "id": new_id,
+        "session_id": session_id,
+        "sender": "visitor",
+        "name": payload.name,
+        "message": payload.message,
+        "created_at": datetime.utcnow().isoformat(),
+        "read": False,
+    }
+    messages.append(message)
+    save_json("chat_messages.json", messages)
+    return {"success": True, "message": message}
+
+
+@app.get("/api/admin/chat/sessions")
+def list_chat_sessions(x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    messages = load_json("chat_messages.json")
+    sessions = {}
+    for m in messages:
+        sid = m["session_id"]
+        if sid not in sessions:
+            sessions[sid] = {"session_id": sid, "name": m["name"] if m["sender"] == "visitor" else "Visitor", "last_message": "", "last_at": "", "unread": 0}
+        sessions[sid]["last_message"] = m["message"]
+        sessions[sid]["last_at"] = m["created_at"]
+        if m["sender"] == "visitor":
+            sessions[sid]["name"] = m["name"]
+            if not m.get("read"):
+                sessions[sid]["unread"] += 1
+    return sorted(sessions.values(), key=lambda s: s["last_at"], reverse=True)
+
+
+@app.get("/api/admin/chat/{session_id}/messages")
+def get_chat_session_messages(session_id: str, x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    messages = load_json("chat_messages.json")
+    session_messages = [m for m in messages if m["session_id"] == session_id]
+    # Mark visitor messages as read
+    changed = False
+    for m in messages:
+        if m["session_id"] == session_id and m["sender"] == "visitor" and not m.get("read"):
+            m["read"] = True
+            changed = True
+    if changed:
+        save_json("chat_messages.json", messages)
+    return session_messages
+
+
+@app.post("/api/admin/chat/{session_id}/reply")
+def reply_to_chat(session_id: str, payload: ChatReplyIn, x_admin_key: Optional[str] = Header(default=None)):
+    require_admin(x_admin_key)
+    messages = load_json("chat_messages.json")
+    new_id = max([m["id"] for m in messages], default=0) + 1
+    message = {
+        "id": new_id,
+        "session_id": session_id,
+        "sender": "admin",
+        "name": "Skyline Properties",
+        "message": payload.message,
+        "created_at": datetime.utcnow().isoformat(),
+        "read": True,
+    }
+    messages.append(message)
+    save_json("chat_messages.json", messages)
+    return message
 
 
 @app.get("/api/settings")
