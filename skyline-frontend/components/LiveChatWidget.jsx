@@ -74,7 +74,7 @@ export default function LiveChatWidget() {
       <button
         onClick={() => setOpen((o) => !o)}
         aria-label={open ? "Chat band karo" : "Chat kholo"}
-        className="fixed bottom-5 right-[88px] sm:right-[104px] z-40 w-14 h-14 rounded-full bg-brand text-white shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
+        className="fixed bottom-[84px] right-5 z-40 w-14 h-14 rounded-full bg-brand text-white shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
       >
         {open ? (
           <span className="text-xl">✕</span>
@@ -94,7 +94,7 @@ export default function LiveChatWidget() {
 
       {/* Chat panel */}
       {open && (
-        <div className="fixed bottom-24 right-5 sm:right-[104px] z-40 w-[90vw] max-w-[340px] h-[440px] bg-white rounded-2xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden">
+        <div className="fixed bottom-[150px] right-5 z-40 w-[90vw] max-w-[340px] h-[440px] bg-white rounded-2xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden">
           <div className="bg-navy text-white px-4 py-3.5 flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center text-sm">💬</div>
             <div>
